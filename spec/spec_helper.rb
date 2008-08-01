@@ -34,7 +34,11 @@ end
 
 
 Spec::Runner.configure do |config|
+  config.before(:all) do
+    FileUtils.rm_rf TEMP_STORAGES
+    FileUtils.mkdir_p TEMP_STORAGES
+  end
   config.after(:all) do
-
+    
   end
 end

@@ -1,10 +1,12 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
 describe "TokyoCabinetRepository" do
-  include Repositories
   before(:each) do
-    @r = ClassFactory.make_instance([DefaultUuidHelpers, HashHelper, MarshalHelper, TokyoCabinetRepository])
-    @r.open
+    @r = ClassFactory.make_instance([Repositories::DefaultUuidHelpers, 
+                                     Repositories::HashHelper, 
+                                     Repositories::MarshalHelper, 
+                                     Repositories::TokyoCabinetRepository])
+    @r.open(:path => TEMP_STORAGES + "/tc.repo")
   end
 
   after(:each) do
@@ -12,7 +14,7 @@ describe "TokyoCabinetRepository" do
   end 
   
   it "should be covered by specs" do
-    
+    pending
   end
 
 end
