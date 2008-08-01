@@ -34,6 +34,10 @@ module StrokeDB
         def get_version(version)
         end
 
+        # Returns the latest version for the given UUID
+        def head(uuid)
+        end
+
         # Returns a document
         def get(uuid)
         end
@@ -53,7 +57,14 @@ module StrokeDB
         # Returns nil
         def delete(uuid)
         end
-
+        
+        # Vanishes the storage
+        def vanish
+        end
+        
+        # Syncs repository updates with the device
+        def sync
+        end
       end
     end # Repositories
   end # Core
