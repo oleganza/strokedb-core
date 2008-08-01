@@ -53,7 +53,7 @@ describe "ClassFactory#new" do
   end
   
   it "should make a module consisting of stack of modules" do
-    cls = ClassFactory.new(@a, @b).new(@sc)
+    cls = ClassFactory.new(@a, @b).new_class(@sc)
     obj = cls.new
     obj.should be_kind_of(@a)
     obj.should be_kind_of(@b)
@@ -61,7 +61,7 @@ describe "ClassFactory#new" do
   end
   
   it "should return an argument if it is already a module (not a list)" do
-    cls = ClassFactory.new(@a).new(@sc)
+    cls = ClassFactory.new(@a).new_class(@sc)
     obj = cls.new
     obj.should be_kind_of(@a)
     obj.m.should == "as"

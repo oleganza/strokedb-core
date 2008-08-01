@@ -6,7 +6,7 @@ describe "TokyoCabinetRepository with default setup" do
                           Repositories::HashHelper, 
                           Repositories::MarshalHelper, 
                           Repositories::TokyoCabinetRepository,
-                          Repositories::MetadataHashLayer).new.new
+                          Repositories::MetadataHashLayer).new_class.new
     @r.open(:path => TEMP_STORAGES + "/tc.repo")
   end
 

@@ -17,8 +17,7 @@ module StrokeDB
           end
         end
         
-        # Creates new class
-        def new(*class_args)
+        def new_class(*class_args)
           m = @composite_module
           Class.new(*class_args) do
             include m
