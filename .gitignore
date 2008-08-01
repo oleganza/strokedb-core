@@ -1,0 +1,12 @@
+.DS_Store
+test/storages/*
+coverage
+meta/rdoc/*
+identity/*
+.*strokedb
+TAGS
+*.swp
+.*.strokedb
+examples/.*.strokedb
+pkg
+strokedb.gemspec
