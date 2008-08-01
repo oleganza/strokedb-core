@@ -6,7 +6,7 @@ module StrokeDB
       #
       # Different pieces of functionality are implemented as independent modules.
       # You should create your own repository class and extend it with all 
-      # the modules you need (in the correct order!).
+      # the modules you need (in the correct order!). See ClassFactory.
       #
       # Built-in modules overview:
       #   AbstractRepository      Defines all the methods with empty bodies. 
