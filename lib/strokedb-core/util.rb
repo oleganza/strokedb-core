@@ -1,10 +1,14 @@
+require 'time'
 require 'util/options_hash'
 require 'util/uuid'
 require 'util/class_factory'
-require 'time'
+require 'util/require_one_of'
 
 module StrokeDB
   module Core
     include Util
+    
+    Util::require_one_of 'json', 'json_pure'
+    
   end
 end

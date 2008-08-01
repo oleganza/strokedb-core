@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
-describe "TokyoCabinetRepository" do
+describe "TokyoCabinetRepository with default setup" do
   before(:each) do
     @r = ClassFactory.make_instance([Repositories::DefaultUuidHelpers, 
                                      Repositories::HashHelper, 
@@ -13,8 +13,6 @@ describe "TokyoCabinetRepository" do
     @r.close
   end 
   
-  it "should be covered by specs" do
-    pending
-  end
+  it { @r }
 
 end

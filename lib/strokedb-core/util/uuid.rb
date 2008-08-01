@@ -148,6 +148,14 @@ module StrokeDB
 
       RAW_UUID_SIZE       = random_uuid_raw.size
       FORMATTED_UUID_SIZE = random_uuid.size
+      
+      # UUID regexp (like 1e3d02cc-0769-4bd8-9113-e033b246b013)
+      UUID_RE = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/.freeze
+      
+      # so called Nil UUID
+      NIL_UUID                      = "00000000-0000-0000-0000-000000000000"
+      RAW_NIL_UUID                  = "\x00" * 16
+      
     end
   end
 end
