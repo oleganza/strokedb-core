@@ -15,12 +15,14 @@ describe "TokyoCabinetRepository with default setup" do
   end 
   
   it "should create/read/updated/delete" do 
-     d = @r.new_document 
-     uuid = @r.post(d)
-     uuid.should =~ UUID_RE
-     @r.get(uuid).should == d
-     
-     
+    d0 = @r.new_document
+    uuid, version = @r.post(d0.dup)
+    uuid.should =~ UUID_RE
+    version.should =~ UUID_RE
+    d1 = @r.get(uuid)
+    d1["uuid"].should =~ UUID_RE
+    d1["version"].should =~ UUID_RE
+    
   end 
   
 end

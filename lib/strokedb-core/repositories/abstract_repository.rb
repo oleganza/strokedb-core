@@ -43,7 +43,7 @@ module StrokeDB
         end
 
         # Adds "uuid", "version" fields to a hash before save
-        # Returns an uuid
+        # Returns a [uuid, version]
         def post(doc)
         end
 

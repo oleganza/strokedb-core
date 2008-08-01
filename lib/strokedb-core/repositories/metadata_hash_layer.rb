@@ -16,7 +16,7 @@ module StrokeDB
           doc[Cuuid]    = uuid
           doc[Cversion] = version
           store(version, uuid, doc)
-          uuid
+          [uuid, version]
         end
 
         # Sets "previous_version" := "version", "version" := new version before save
