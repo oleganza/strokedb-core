@@ -18,7 +18,7 @@ module StrokeDB
         def new_document
         end
         
-        def new_deleted_document
+        def new_deleted_document(doc)
         end
       
       end

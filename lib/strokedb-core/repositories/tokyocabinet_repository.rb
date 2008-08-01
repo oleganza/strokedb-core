@@ -73,7 +73,9 @@ module StrokeDB
 
       private
         
-        # Methods are prefixed to avoid clashing with other modules' private helpers.
+        # oleganza: 
+        # Private methods are prefixed to avoid clashing with other modules' private helpers.
+        # Now I understand why private members in C++ are not shared in the inheritance chain.
         
         def tc_raise(meth, *args)
           ecode = @tc_hdb.ecode

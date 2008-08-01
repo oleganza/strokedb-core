@@ -16,12 +16,27 @@ describe "TokyoCabinetRepository with default setup" do
   
   it "should create/read/updated/delete" do 
     d0 = @r.new_document
-    uuid, version = @r.post(d0.dup)
+    uuid, version1 = @r.post(d0.dup)
     uuid.should =~ UUID_RE
-    version.should =~ UUID_RE
+    version1.should =~ UUID_RE
+    
     d1 = @r.get(uuid)
-    d1["uuid"].should =~ UUID_RE
-    d1["version"].should =~ UUID_RE
+    d1["uuid"].should == uuid
+    d1["version"].should == version1
+    d1["previous_version"].should be_nil
+    
+    d1 = @r.get_version(version1)
+    d1["uuid"].should == uuid
+    d1["version"].should == version1
+    
+    version2 = @r.put(uuid, d1.dup)
+    version2.should =~ UUID_RE
+    
+    d2 = @r.get_version(version2)
+    
+    d2["uuid"].should == uuid
+    d2["version"].should == version2
+    d2["previous_version"].should == version1
     
   end 
   

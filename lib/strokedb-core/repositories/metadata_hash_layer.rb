@@ -8,36 +8,39 @@ module StrokeDB
         Cversion          = "version".freeze
         Cprevious_version = "previous_version".freeze
         
-        # Adds "uuid", "version" fields to a hash before save
-        # Returns an uuid
+        # Adds "uuid", "version" fields to a hash before save.
+        # Operation order is important (surprise!): generate_version() 
+        # may rely on document contents.
+        # Returns [uuid, version]
         def post(doc)
           uuid          = generate_uuid(doc)
-          version       = generate_version(doc)
           doc[Cuuid]    = uuid
+          version       = generate_version(doc)
           doc[Cversion] = version
           store(version, uuid, doc)
           [uuid, version]
         end
 
         # Sets "previous_version" := "version", "version" := new version before save
-        # Returns nil
+        # Returns version
         def put(uuid, doc)
-          version                = generate_version(doc)
           doc[Cprevious_version] = doc[Cversion]
+          version                = generate_version(doc)
           doc[Cversion]          = version
           store(version, uuid, doc)
-          nil
+          version
         end
 
         # Mostly same as put()
         # Saves {deleted: true} version, removes document from indexes
-        # Returns nil
+        # Returns version
         def delete(uuid, doc)
-          doc2                    = new_deleted_document
-          doc2[Cversion]          = generate_version(doc)
+          doc2                    = new_deleted_document(doc)
           doc2[Cprevious_version] = doc[Cversion]
-          store(version, uuid, doc)
-          nil
+          version                 = generate_version(doc2)
+          doc2[Cversion]          = version
+          store(version, uuid, doc2)
+          version
         end
         
       end

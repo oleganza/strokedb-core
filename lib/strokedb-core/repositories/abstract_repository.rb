@@ -48,13 +48,13 @@ module StrokeDB
         end
 
         # Sets "previous_version" := "version", "version" := new version before save
-        # Returns nil
+        # Returns version
         def put(uuid, doc)
         end
 
         # Mostly the same as put()
         # Saves {deleted: true} version, removes document from indexes
-        # Returns nil
+        # Returns version
         def delete(uuid)
         end
         
@@ -64,6 +64,25 @@ module StrokeDB
         
         # Syncs repository updates with the device
         def sync
+        end
+        
+        # Returns number of versions in a repository
+        def versions_count
+        end
+        
+        # Returns number of UUIDs stored in a repository
+        def uuids_count
+        end
+        
+        # Iterates over each UUID.
+        # Returns self if block is supplied, iterator instance otherwise.
+        def each_uuid(&block)
+        end
+        
+        # Iterates over each version.
+        # Returns self if block is supplied, iterator instance otherwise.
+        # Note: in general, versions are not grouped by UUID!
+        def each_version(&block)
         end
       end
     end # Repositories
