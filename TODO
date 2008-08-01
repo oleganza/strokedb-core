@@ -1,4 +1,6 @@
 repositories:
+  write ahead log
+  repo syncing
   abstract async api
   tokyocabinet iterators
   json dump backend
