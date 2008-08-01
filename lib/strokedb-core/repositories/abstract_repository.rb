@@ -12,7 +12,7 @@ module StrokeDB
       #   AbstractRepository      Defines all the methods with empty bodies. 
       #   AbstractAsyncRepository Defines all the callbacks for async interfaces.
       #   TokyoCabinetRepository  Defines operations using TokyoCabinet API
-      #   MarshalDumpHelper       Defines encode_doc/decode_doc using Marshal.dump/load.
+      #   MarshalHelper           Defines encode_doc/decode_doc using Marshal.dump/load.
       #   JsonHelper              Defines encode_doc/decode_doc using JSON format.
       #   ProxyRepository         Defines an asynchronous proxy to a cluster of nodes.
       #   etc.
@@ -21,6 +21,7 @@ module StrokeDB
       #
       module AbstractRepository
         include AbstractHelpers
+        include StandardConstants
         
         # Opens database (options is a Hash)
         def open(options)

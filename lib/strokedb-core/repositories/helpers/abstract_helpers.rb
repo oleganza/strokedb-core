@@ -15,6 +15,9 @@ module StrokeDB
         def decode_doc(encoded_doc)
         end
         
+        def new_empty_document
+        end
+        
         def new_deleted_document
         end
       

@@ -7,7 +7,7 @@ module StrokeDB
         include TokyoCabinet
         attr_accessor :tc_path, :tc_path_index, :tc_hdb,  :tc_hdb_index
         
-        # Opens a database (options is an OptionsHash)
+        # Opens a repository (options is an OptionsHash)
         def open(options)
           OptionsHash!(options)
           @tc_path = options.require("path")
@@ -20,7 +20,7 @@ module StrokeDB
           nil
         end
       
-        # Closes database
+        # Closes repository
         def close
           @tc_hdb.close or tc_raise("close")
           @tc_hdb_index.close or tc_raise("index.close")
@@ -39,6 +39,7 @@ module StrokeDB
 
         # Returns a document or nil if not found
         def get(uuid)
+          # Note:
           # We do not call head(uuid) here because it might be 
           # a completely different method in a stack of modules.
           # For refactoring purposes you must use custom private

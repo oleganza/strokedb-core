@@ -1,6 +1,7 @@
 module StrokeDB
   module Core
     module Repositories
+      # TODO: finish this!
       module AbstractAsyncRepository
       
         # When database is opened
@@ -22,12 +23,10 @@ module StrokeDB
         # Receives new document's uuid.
         def on_post(uuid)
         end
+        
+        # TODO!
+        # ...
 
-        def put
-        end
-
-        def delete
-        end
       end
     end # Repositories
   end # Core

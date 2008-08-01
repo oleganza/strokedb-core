@@ -11,6 +11,8 @@ describe "TokyoCabinetRepository" do
     @r.close
   end 
   
-  
+  it "should be covered by specs" do
+    
+  end
 
 end
