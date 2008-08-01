@@ -34,7 +34,7 @@ module StrokeDB
         
         # Returns a document or nil if not found
         def get_version(version)
-          @tc_hdb.get(version)
+          decode_doc(@tc_hdb.get(version))
         end
 
         # Returns a document or nil if not found
@@ -46,44 +46,14 @@ module StrokeDB
           # methods with some module-specific prefix 
           # (like "tc_" for tokyocabinet)
           version = @tc_hdb_index.get(uuid) or return nil
-          @tc_hdb.get(version)
+          decode_doc(@tc_hdb.get(version))
         end
-
-        # Adds "uuid", "version" fields to a hash before save
-        # Returns an uuid
-        def post(doc)
-          uuid          = generate_uuid(doc)
-          version       = generate_version(doc)
-          doc[Cuuid]    = uuid
-          doc[Cversion] = version
-          encoded_doc   = encode_doc(doc)
-          
-          tc_store(version, uuid, encoded_doc)
-          uuid
-        end
-
-        # Sets "previous_version" := "version", "version" := new version before save
-        # Returns nil
-        def put(uuid, doc)
-          version                = generate_version(doc)
-          doc[Cprevious_version] = doc[Cversion]
-          doc[Cversion]          = version
-          encoded_doc            = encode_doc(doc)
-          
-          tc_store(version, uuid, encoded_doc)
-          nil
-        end
-
-        # Mostly same as put()
-        # Saves {deleted: true} version, removes document from indexes
-        # Returns nil
-        def delete(uuid, doc)
-          doc2                    = new_deleted_document
-          doc2[Cversion]          = generate_version(doc)
-          doc2[Cprevious_version] = doc[Cversion]
-          encoded_doc             = encode_doc(doc2)
-          
-          tc_store(version, uuid, encoded_doc)
+        
+        # Stores doc in a repository. Returns nil.
+        def store(version, uuid, doc)
+          encoded_doc = encode_doc(doc)
+          @tc_hdb.put(version, encoded_doc) or tc_raise("put", version, encoded_doc)
+          @tc_hdb_index.put(uuid, version) or tc_raise("index.put", uuid, version)
           nil
         end
         
@@ -104,10 +74,6 @@ module StrokeDB
       private
         
         # Methods are prefixed to avoid clashing with other modules' private helpers.
-        def tc_store(version, uuid, encoded_doc)
-          @tc_hdb.put(version, encoded_doc) or tc_raise("put", version, encoded_doc)
-          @tc_hdb_index.put(uuid, version) or tc_raise("index.put", uuid, version)
-        end
         
         def tc_raise(meth, *args)
           ecode = @tc_hdb.ecode

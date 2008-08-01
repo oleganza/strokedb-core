@@ -2,7 +2,6 @@ module StrokeDB
   module Core
     module Repositories
       module AbstractHelpers
-        include StandardConstants
         
         def generate_version(doc)
         end
@@ -16,7 +15,7 @@ module StrokeDB
         def decode_doc(encoded_doc)
         end
         
-        def new_empty_document
+        def new_document
         end
         
         def new_deleted_document

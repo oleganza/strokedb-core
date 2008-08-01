@@ -3,7 +3,7 @@ module StrokeDB
     module Repositories
       module HashHelper
 
-        def new_empty_document
+        def new_document
           { }
         end
         

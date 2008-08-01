@@ -21,7 +21,6 @@ module StrokeDB
       #
       module AbstractRepository
         include AbstractHelpers
-        include StandardConstants
         
         # Opens database (options is a Hash)
         def open(options)
