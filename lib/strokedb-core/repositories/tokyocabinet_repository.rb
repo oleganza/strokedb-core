@@ -76,7 +76,7 @@ module StrokeDB
         # Mostly same as put()
         # Saves {deleted: true} version, removes document from indexes
         # Returns nil
-        def delete(doc)
+        def delete(uuid, doc)
           doc2                    = new_deleted_document
           doc2[Cversion]          = generate_version(doc)
           doc2[Cprevious_version] = doc[Cversion]
