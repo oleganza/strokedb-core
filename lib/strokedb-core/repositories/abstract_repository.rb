@@ -42,6 +42,11 @@ module StrokeDB
         def get(uuid)
         end
 
+        # Stores doc in a repository tagged with version & uuid arguments. 
+        # Returns nil.
+        def store(version, uuid, doc)
+        end
+        
         # Adds "uuid", "version" fields to a hash before save.
         # Returns a [uuid, version].
         def post(doc)
