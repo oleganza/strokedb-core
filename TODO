@@ -1,0 +1,19 @@
+oleganza:
+  repositories:
+    abstract async api
+    tokyocabinet iterators
+    json dump backend
+    raw uuid storage (+uuid conversion)
+  views:
+    abstract api
+    tokyocabinet backend
+  networking:
+    abstract async api
+    async/sync rpc api:
+      for repositories
+      for views
+    
+someone:
+  validations extraction into separate API
+  
+  
