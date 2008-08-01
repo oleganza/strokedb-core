@@ -2,11 +2,11 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
 describe "TokyoCabinetRepository with default setup" do
   before(:all) do
-    @r = ClassFactory.make_instance([Repositories::DefaultUuidHelpers, 
-                                     Repositories::HashHelper, 
-                                     Repositories::MarshalHelper, 
-                                     Repositories::TokyoCabinetRepository,
-                                     Repositories::MetadataHashLayer])
+    @r = ClassFactory.new(Repositories::DefaultUuidHelpers, 
+                          Repositories::HashHelper, 
+                          Repositories::MarshalHelper, 
+                          Repositories::TokyoCabinetRepository,
+                          Repositories::MetadataHashLayer).new.new
     @r.open(:path => TEMP_STORAGES + "/tc.repo")
   end
 

@@ -1,26 +1,30 @@
 module StrokeDB
   module Core
     module Util
-      module ClassFactory
-        def self.make_instance(modules, class_args = [], instance_args = [])
-          make_class(modules, class_args).new(*instance_args)
-        end
+      class ClassFactory
+        attr_accessor :composite_module, :modules
         
-        def self.make_class(modules, class_args = [])
-          mod = make_module(modules)
-          Class.new(*class_args) do
-            include mod
-          end
-        end
-        
-        def self.make_module(modules)
-          return modules if modules.is_a?(Module)
-          Module.new do
-            modules.each do |m|
-              include m
+        def initialize(*modules)
+          @modules = modules
+          @composite_module = if modules.size == 1
+            modules.first
+          else
+            Module.new do
+              modules.each do |m|
+                include m
+              end
             end
           end
         end
+        
+        # Creates new class
+        def new(*class_args)
+          m = @composite_module
+          Class.new(*class_args) do
+            include m
+          end
+        end
+        
       end
     end # Repositories
   end # Core

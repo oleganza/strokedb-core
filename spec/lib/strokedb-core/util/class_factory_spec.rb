@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-# TODO: spec arguments for Class.new and Class#new.
-
-describe "ClassFactory.make_module" do
+describe "ClassFactory.new" do
   
   before(:each) do
     @a = Module.new do
@@ -19,7 +17,8 @@ describe "ClassFactory.make_module" do
   end
   
   it "should make a module consisting of stack of modules" do
-    mod = ClassFactory.make_module([@a, @b])
+    cf = ClassFactory.new(@a, @b)
+    mod = cf.composite_module
     @obj.extend(mod)
     @obj.should be_kind_of(@a)
     @obj.should be_kind_of(@b)
@@ -27,17 +26,18 @@ describe "ClassFactory.make_module" do
   end
   
   it "should return an argument if it is already a module (not a list)" do
-    mod = ClassFactory.make_module(@a)
+    cf = ClassFactory.new(@a)
+    mod = cf.composite_module
     mod.object_id.should == @a.object_id
   end
 end
 
-describe "ClassFactory.make_class" do
+describe "ClassFactory#new" do
   
   before(:each) do
     @a = Module.new do
       def m
-        "a"
+        "a" + super
       end
     end
     @b = Module.new do
@@ -45,49 +45,26 @@ describe "ClassFactory.make_class" do
         "b" + super
       end
     end
+    @sc = Class.new do
+      def m
+        "s"
+      end
+    end
   end
   
   it "should make a module consisting of stack of modules" do
-    cls = ClassFactory.make_class([@a, @b])
+    cls = ClassFactory.new(@a, @b).new(@sc)
     obj = cls.new
     obj.should be_kind_of(@a)
     obj.should be_kind_of(@b)
-    obj.m.should == "ba"
+    obj.m.should == "bas"
   end
   
   it "should return an argument if it is already a module (not a list)" do
-    cls = ClassFactory.make_class(@a)
+    cls = ClassFactory.new(@a).new(@sc)
     obj = cls.new
     obj.should be_kind_of(@a)
-    obj.m.should == "a"
+    obj.m.should == "as"
   end
 end
 
-describe "ClassFactory.make_instance" do
-  
-  before(:each) do
-    @a = Module.new do
-      def m
-        "a"
-      end
-    end
-    @b = Module.new do
-      def m
-        "b" + super
-      end
-    end
-  end
-  
-  it "should make a module consisting of stack of modules" do
-    obj = ClassFactory.make_instance([@a, @b])
-    obj.should be_kind_of(@a)
-    obj.should be_kind_of(@b)
-    obj.m.should == "ba"
-  end
-  
-  it "should return an argument if it is already a module (not a list)" do
-    obj = ClassFactory.make_instance(@a)
-    obj.should be_kind_of(@a)
-    obj.m.should == "a"
-  end
-end
