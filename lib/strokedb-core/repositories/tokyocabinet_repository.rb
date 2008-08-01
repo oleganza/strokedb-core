@@ -16,14 +16,14 @@ module StrokeDB
           @tc_hdb_index = HDB::new
           mode = HDB::OWRITER | HDB::OCREAT
           @tc_hdb.open(@tc_path, mode) or tc_raise("open", @tc_path, mode)
-          @tc_hdb_index.open(@tc_path_index, mode) or tc_raise("index.open", @tc_path_index, mode)
+          @tc_hdb_index.open(@tc_path_index, mode) or tc_index_raise("open", @tc_path_index, mode)
           nil
         end
       
         # Closes repository
         def close
           @tc_hdb.close or tc_raise("close")
-          @tc_hdb_index.close or tc_raise("index.close")
+          @tc_hdb_index.close or tc_index_raise("close")
           nil
         end
 
@@ -53,21 +53,21 @@ module StrokeDB
         def store(version, uuid, doc)
           encoded_doc = encode_doc(doc)
           @tc_hdb.put(version, encoded_doc) or tc_raise("put", version, encoded_doc)
-          @tc_hdb_index.put(uuid, version) or tc_raise("index.put", uuid, version)
+          @tc_hdb_index.put(uuid, version) or tc_index_raise("put", uuid, version)
           nil
         end
         
         # Vanishes the storage
         def vanish
           @tc_hdb.vanish or tc_raise("vanish")
-          @tc_hdb_index.vanish or tc_raise("index.vanish")
+          @tc_hdb_index.vanish or tc_index_raise("vanish")
           nil
         end
         
         # Syncs repository updates with the device
         def sync
           @tc_hdb.sync or tc_raise("sync")
-          @tc_hdb_index.sync or tc_raise("index.sync")
+          @tc_hdb_index.sync or tc_index_raise("sync")
           nil
         end
         
@@ -78,11 +78,29 @@ module StrokeDB
         
         # Returns number of UUIDs stored in a repository
         def uuids_count
-          @tc_hdb_index.size
+          @tc_hdb_index.size or tc_index_raise("uuids_count")
+        end
+
+        def each_uuid(&blk)
+          block_given? or return new_uuids_iterator
+          # TODO: each_uuid(&blk)
+        end
+
+        def each_version(&blk)
+          block_given? or return new_versions_iterator
+          # TODO: each_version(&blk)
         end
         
+        def new_uuids_iterator
+          # TODO: new_uuids_iterator
+        end
         
-
+        def new_versions_iterator
+          # TODO: new_versions_iterator
+        end
+      
+        class StorageError < Exception; end
+        
       private
         
         # oleganza: 
@@ -92,8 +110,15 @@ module StrokeDB
         def tc_raise(meth, *args)
           ecode = @tc_hdb.ecode
           argsi = args.map{|a|a.inspect}.join(', ')
-          raise("TokyoCabinet::HDB##{meth}(#{argsi}) error: %s\n" % @tc_hdb.errmsg(ecode))
+          raise(StorageError, "TokyoCabinet::HDB##{meth}(#{argsi}) error: %s\n" % @tc_hdb.errmsg(ecode))
         end
+        
+        def tc_index_raise(meth, *args)
+          ecode = @tc_hdb_index.ecode
+          argsi = args.map{|a|a.inspect}.join(', ')
+          raise(StorageError, "TokyoCabinet::HDB(uuids index)##{meth}(#{argsi}) error: %s\n" % @tc_hdb_index.errmsg(ecode))
+        end
+        
         
       end
     end # Repositories

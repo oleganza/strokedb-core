@@ -22,55 +22,55 @@ module StrokeDB
       module AbstractRepository
         include AbstractHelpers
         
-        # Opens database (options is a Hash)
+        # Opens database (options is a Hash).
         def open(options)
         end
       
-        # Closes database (file, connection, etc.)
+        # Closes database (file, connection, etc.).
         def close
         end
       
-        # Returns a document by version
+        # Returns a document by version.
         def get_version(version)
         end
 
-        # Returns the latest version for the given UUID
+        # Returns the latest version for the given UUID.
         def head(uuid)
         end
 
-        # Returns a document
+        # Returns a document.
         def get(uuid)
         end
 
-        # Adds "uuid", "version" fields to a hash before save
-        # Returns a [uuid, version]
+        # Adds "uuid", "version" fields to a hash before save.
+        # Returns a [uuid, version].
         def post(doc)
         end
 
-        # Sets "previous_version" := "version", "version" := new version before save
-        # Returns version
+        # Sets "previous_version" := "version", "version" := new version before save.
+        # Returns version.
         def put(uuid, doc)
         end
 
         # Mostly the same as put()
-        # Saves {deleted: true} version, removes document from indexes
-        # Returns version
+        # Saves {deleted: true} version, removes document from indexes.
+        # Returns version.
         def delete(uuid)
         end
         
-        # Vanishes the storage
+        # Vanishes the storage.
         def vanish
         end
         
-        # Syncs repository updates with the device
+        # Syncs repository updates with the device.
         def sync
         end
         
-        # Returns number of versions in a repository
+        # Returns number of versions in a repository.
         def versions_count
         end
         
-        # Returns number of UUIDs stored in a repository
+        # Returns number of UUIDs stored in a repository.
         def uuids_count
         end
         
@@ -84,6 +84,15 @@ module StrokeDB
         # Note: in general, versions are not grouped by UUID!
         def each_version(&block)
         end
+        
+        # Returns new iterator for uuids.
+        def new_uuids_iterator
+        end
+        
+        # Returns new iterator for versions.
+        def new_versions_iterator
+        end
+        
       end
     end # Repositories
   end # Core
