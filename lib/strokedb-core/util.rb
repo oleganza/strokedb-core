@@ -1,4 +1,5 @@
 require 'util/options_hash'
+require 'util/uuid'
 require 'time'
 
 module StrokeDB
