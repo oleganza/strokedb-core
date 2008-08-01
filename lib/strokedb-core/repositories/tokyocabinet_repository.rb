@@ -9,6 +9,7 @@ module StrokeDB
         
         # Opens a database (options is an OptionsHash)
         def open(options)
+          OptionsHash!(options)
           @tc_path = options.require("path")
           @tc_uuid_index_path = options["uuid_index_path"] || (@tc_path + ".uuidindex")
           @tc_hdb = HDB::new
