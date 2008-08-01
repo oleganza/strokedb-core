@@ -70,6 +70,18 @@ module StrokeDB
           @tc_hdb_index.sync or tc_raise("index.sync")
           nil
         end
+        
+        # Returns number of versions in a repository
+        def versions_count
+          @tc_hdb.size
+        end
+        
+        # Returns number of UUIDs stored in a repository
+        def uuids_count
+          @tc_hdb_index.size
+        end
+        
+        
 
       private
         

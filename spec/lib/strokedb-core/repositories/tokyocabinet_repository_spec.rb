@@ -37,7 +37,12 @@ describe "TokyoCabinetRepository with default setup" do
     d2["uuid"].should == uuid
     d2["version"].should == version2
     d2["previous_version"].should == version1
+
+    @r.uuids_count.should == 1
+    @r.versions_count.should == 2
     
-  end 
+    pending "iterators are missing"
+    
+  end
   
 end
