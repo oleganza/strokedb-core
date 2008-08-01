@@ -2,7 +2,8 @@ module StrokeDB
   module Core
     module Repositories
       module AbstractHelpers
-
+        include StandardConstants
+        
         def generate_version(doc)
         end
 

@@ -5,7 +5,6 @@ module StrokeDB
         Cuuid             = "uuid".freeze
         Cversion          = "version".freeze
         Cprevious_version = "previous_version".freeze
-        Cdeleted          = "deleted".freeze
       end
     end # Repositories
   end # Core

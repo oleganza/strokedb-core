@@ -8,7 +8,7 @@ module StrokeDB
         end
         
         def new_deleted_document
-          { Cdeleted => true }
+          { "deleted" => true }
         end
       end
     end # Repositories
