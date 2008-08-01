@@ -10,3 +10,5 @@ TAGS
 examples/.*.strokedb
 pkg
 strokedb.gemspec
+spec/temp
+spec/temp/*
