@@ -38,7 +38,7 @@ module StrokeDB
         def head(uuid)
         end
 
-        # Returns a document.
+        # Returns a HEAD version document.
         def get(uuid)
         end
 
