@@ -5,3 +5,39 @@ Minimalistic modular database engine.
 Authors: Oleg Andreev <oleganza@idbns.com> & Yurii Rashkovskii <yrashk@idbns.com>
 
 Copyright 2008 IDBNS, inc.
+
+= Architecture overview
+
+StrokeDB stores a set of versioned documents identified by UUID.
+Document is a hash-like container of slots: flat set of values tagged with string keys.
+Slots store arbitrary serializable values (most common types are booleans, 
+numbers, strings, arrays, numbers, time).
+Basic repository implements three retrieval methods: 
+  * get(uuid) 
+  * get_version(version)
+  * each{|doc| ... }
+
+Efficient indexing is  implemented with Views. View is an indexed sorted list of key-value
+pairs. Each view relies on map(doc) method to produce key-value pairs (like in map-reduce).
+View requests are implemented by prefix-based searching using powerful find() method.
+
+StrokeDB Core API relies on: 
+  * two methods on document: doc["slot"], doc["slot"]=) 
+  * slots: "uuid", "version", "previous_version"
+  * ability to store Arrays and Strings in a "previous_version" slot. (Array is used when 
+  the version is a result of merge operation.)
+
+== Versions
+
+Every document references several previous versions. 
+The very first version of document does not reference any previous version. 
+Regular versions reference only one previous_version.
+In case of merge, document references two or more previous versions.
+Document deletion is just a creation of the new version with the {"deleted"=>true} slot.
+
+== Views
+TODO
+
+== Synchronization (fetch and merge operations)
+TODO
+
