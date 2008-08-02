@@ -8,6 +8,7 @@ repositories:
 views:
   abstract api
   tokyocabinet backend
+  try to move encode/decode stuff to a separate wrap-around API layer
 networking:
   abstract async api
   async/sync rpc api:
