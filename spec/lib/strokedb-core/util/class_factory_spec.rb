@@ -32,7 +32,7 @@ describe "ClassFactory.new" do
   end
 end
 
-describe "ClassFactory#new" do
+describe "ClassFactory#new_class" do
   
   before(:each) do
     @a = Module.new do
@@ -52,7 +52,7 @@ describe "ClassFactory#new" do
     end
   end
   
-  it "should make a module consisting of stack of modules" do
+  it "should make a class consisting of stack of modules" do
     cls = ClassFactory.new(@a, @b).new_class(@sc)
     obj = cls.new
     obj.should be_kind_of(@a)
@@ -60,11 +60,12 @@ describe "ClassFactory#new" do
     obj.m.should == "bas"
   end
   
-  it "should return an argument if it is already a module (not a list)" do
+  it "should return an argument if it is already a module (not a list) and convert this argument into a class" do
     cls = ClassFactory.new(@a).new_class(@sc)
     obj = cls.new
     obj.should be_kind_of(@a)
     obj.m.should == "as"
   end
 end
+
 
