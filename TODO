@@ -6,8 +6,11 @@ repositories:
   json dump backend
   raw uuid storage (+uuid conversion)
 views:
+  specs for all layers!
   abstract api
-  tokyocabinet backend
+  update strategies (heads, versions)
+  default_key_encoder
+  default_value_encoder
   connect with repository
     async view update API
 networking:
