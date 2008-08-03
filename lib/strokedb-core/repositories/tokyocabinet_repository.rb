@@ -7,7 +7,7 @@ module StrokeDB
         include TokyoCabinet
         attr_accessor :tc_path, :tc_path_index, :tc_hdb,  :tc_hdb_index
         
-        # Opens a repository (options is an OptionsHash)
+        # Opens a repository
         def open(options)
           OptionsHash!(options)
           @tc_path = options.require("path")

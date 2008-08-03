@@ -29,6 +29,18 @@ module StrokeDB
           # faster implementation for normal order finds:
           if start_key and not reverse
             keys = @tc_bdb.fwmkeys(start_key, max)
+            if keys.size > 0
+              end_key_size = end_key.size
+              keys = keys[offset || 0, limit || Float::MAX].select do |key|
+                key[0, end_key_size] <= end_key
+              end
+              bdb = @tc_bdb
+              if with_keys
+                return keys.map{|k| [k, bdb.get(k)] }
+              else
+                return keys.map{|k| bdb.get(k) }
+              end
+            end
           end
           
           cur = @tc_bdbcur # alias for faster access in tight loops (ivars are accessed by name)
@@ -80,8 +92,8 @@ module StrokeDB
         end
         
         # Removes previous key-value pairs, adds new ones.
-        def update_head(uuid, version, doc, prev_version, prev_doc)
-          # TODO!
+        def update_head(repository, uuid, version, doc, prev_version, prev_doc)
+          
         end
         
         # Simply adds new key-value pairs for the particular version.
