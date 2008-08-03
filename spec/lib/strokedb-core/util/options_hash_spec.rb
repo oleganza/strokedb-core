@@ -78,7 +78,7 @@ describe "OptionsHash! with defaults" do
   
   before(:each) do
     @h = {"string" => "string", :sym => "sym"}
-    @oh = OptionsHash!(@h, {"c" => "default", "string" => "default", "sym" => "default" })
+    @oh = OptionsHash!(@h, {"c" => "default", :string => "default", :sym => "default" })
   end
 
   it { @h["c"].should == "default" }
