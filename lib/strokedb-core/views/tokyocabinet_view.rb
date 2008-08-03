@@ -22,6 +22,7 @@ module StrokeDB
         # Safely closes the view (closes file/connection or frees some resources).
         def close
           @tc_bdb.close or tc_raise("close")
+          @tc_bdbcur = nil
         end
         
         def find(start_key, end_key, limit, offset, reverse, with_keys)
