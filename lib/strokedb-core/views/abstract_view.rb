@@ -1,6 +1,12 @@
 module StrokeDB
   module Core
     module Views
+      # View API
+      # Document update process:
+      # * update(repository, doc)                # new version of doc is passed as an argument
+      # * map(doc)                               # interesting document is used to produce key-value pairs
+      # * update_pairs(add_pairs, remove_pairs)  # some pairs are removed, some are added to the index
+      #
       module AbstractView
         
         # Opens a view with the options.
@@ -40,7 +46,7 @@ module StrokeDB
         
         # Adds new_pairs and removes old_pairs. Both arguments can be nil.
         # Returns nil.
-        def update_pairs(new_pairs = nil, old_pairs = nil)
+        def update_pairs(add_pairs = nil, remove_pairs = nil)
         end
         
         # Maps doc to a key-value view records.
