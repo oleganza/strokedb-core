@@ -82,23 +82,14 @@ module StrokeDB
         end
 
         def each_uuid(&blk)
-          block_given? or return new_uuids_iterator
           # TODO: each_uuid(&blk)
+          # TokyoCabinetUuidsIterator.new(&blk)
         end
 
         def each_version(&blk)
-          block_given? or return new_versions_iterator
           # TODO: each_version(&blk)
+          # TokyoCabinetVersionsIterator.new(&blk)
         end
-        
-        def new_uuids_iterator
-          # TODO: new_uuids_iterator
-        end
-        
-        def new_versions_iterator
-          # TODO: new_versions_iterator
-        end
-      
         class StorageError < Exception; end
         
       private

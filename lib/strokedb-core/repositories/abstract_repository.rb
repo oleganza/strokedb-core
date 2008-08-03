@@ -90,14 +90,6 @@ module StrokeDB
         def each_version(&block)
         end
         
-        # Returns new iterator for uuids.
-        def new_uuids_iterator
-        end
-        
-        # Returns new iterator for versions.
-        def new_versions_iterator
-        end
-        
       end
     end # Repositories
   end # Core
