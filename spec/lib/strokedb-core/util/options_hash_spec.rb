@@ -73,3 +73,19 @@ describe "OptionsHash#[]=" do
   it { @h[:y].should  == "y" }
   it { @h["y"].should == "y" }
 end
+
+describe "OptionsHash! with defaults" do
+  
+  before(:each) do
+    @h = {"string" => "string", :sym => "sym"}
+    @oh = OptionsHash!(@h, {"c" => "default", "string" => "default", "sym" => "default" })
+  end
+
+  it { @h["c"].should == "default" }
+  it { @h[:c].should  == "default" }
+  it { @h["string"].should  == "string" }
+  it { @h[:string].should  == "string" }
+  it { @h["sym"].should  == "sym" }
+  it { @h[:sym].should  == "sym" }
+  
+end
