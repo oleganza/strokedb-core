@@ -63,20 +63,7 @@ module StrokeDB
         # Syncs data caches with device (FS, network link)
         def sync
         end
-                
-        # Encoding stuff
-        
-        def encode_key(key)
-        end
 
-        def decode_key(encoded_key)
-        end
-              
-        def encode_value(value)
-        end
-
-        def decode_value(evalue)
-        end
       end
     end
   end

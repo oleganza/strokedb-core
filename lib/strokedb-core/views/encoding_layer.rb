@@ -1,7 +1,7 @@
 module StrokeDB
   module Core
     module Views
-      # Module relies on the following methods:
+      # Module requires the following methods to be defined in a view object:
       #
       #  * encode_key(k)
       #  * decode_key(ek)
