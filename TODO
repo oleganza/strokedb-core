@@ -20,6 +20,7 @@ validations:
   networking:
     transferrable validations (don't repeat presence_of on server if client already checked, but check uniqueness_of)
 admin tasks:
+  console
   rake
   gem
   rcov
