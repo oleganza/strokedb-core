@@ -6,7 +6,7 @@ module StrokeDB
       # Note: core classes are extended by method which name is SHA1 UUID of the string: 
       # "StrokeDB::Core::Views::DefaultKeyEncoder"
       # 
-      module DefaultKeyEncoder
+      module DefaultKeyCodec
         module CoreExtensions
           class ::NilClass
             STROKEDB_A = "A".freeze
