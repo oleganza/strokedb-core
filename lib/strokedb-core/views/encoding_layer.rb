@@ -1,6 +1,13 @@
 module StrokeDB
   module Core
     module Views
+      # Module relies on the following methods:
+      #
+      #  * encode_key(k)
+      #  * decode_key(ek)
+      #  * encode_value(v)
+      #  * decode_key(ev)
+      #
       module EncodingLayer
 
         def find(start_key, end_key, limit, offset, reverse, with_keys)
@@ -25,21 +32,7 @@ module StrokeDB
             [encode_key(k), encode_value(v)]
           end
         end
-        
-        # User-defined methods
-        
-        def encode_key(key)
-        end
-
-        def decode_key(encoded_key)
-        end
-      
-        def encode_value(value)
-        end
-
-        def decode_value(evalue)
-        end
-      
+              
       end
     end
   end
