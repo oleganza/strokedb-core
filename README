@@ -45,16 +45,17 @@ not available in the repository.
 TODO
 
 == Synchronization (fetch and merge operations)
-TODO
 
-Common cases:
-1. Fetch a list of new documents.
-2. Fetch new revisions from the linear history.
+Data cases:
+1. Many new documents, few versions.
+2. Many documents with many versions organized linearly.
 
 Branches must be handled efficiently as well, but the first priority is to make first two cases 
 as performant as possible.
 
-
+Fetch contexts:
+1. Occasional fetch (hourly, daily etc.)
+2. Streamed syncing (i.e. master-slave replication)
 
 == Availability
 
