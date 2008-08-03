@@ -90,9 +90,50 @@ module StrokeDB
           k.a785274d_dccb_53f1_8262_012d28b070ec
         end
         
+        A = "A".freeze
+        B = "B".freeze
+        C = "C".freeze
+        D = "D".freeze
+        S = "S".freeze
+        T = "T".freeze
+        X = "@".freeze
+        S_= " ".freeze
+        R = (1..-1).freeze
+        Cdot  = ".".freeze
+        C1    = "1".freeze
+        C0dot = "0.".freeze
+        
         def decode_key(ek)
-          
+          values = string.split(S_).map do |token|
+            pfx = token[0,1]
+            case pfx
+            when A
+              nil
+            when B
+              false
+            when C
+              true
+            when D
+              int, rat = token[10, 666].split(Cdot)
+              sign = token[1, 1] == C1 ? 1 : -1
+              size = token[2, 8].to_i(16)
+              int = int.to_i(16)
+              if sign == -1
+                size = 2**32 - size
+                int  = 16**size - int
+              end
+              rat ? sign*int + (C0dot + rat).to_f : sign*int
+            when S, X
+              token[R]
+            when T
+              Time.xmlschema(token[R]).localtime
+            else
+              token  # unknown stuff is decoded as a string
+            end
+          end
+          values.size > 1 ? values : values[0]
         end
+
       end
     end
   end
