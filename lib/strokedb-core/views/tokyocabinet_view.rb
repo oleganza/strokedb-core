@@ -65,7 +65,7 @@ module StrokeDB
         
         # Simply adds new key-value pairs for the particular version.
         def update_version(uuid, version, doc)
-          new_pairs = map_with_encoding(doc)
+          new_pairs = map(doc)
           # TODO: storage.insert(new_pairs)
         end
         

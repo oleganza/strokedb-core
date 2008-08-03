@@ -69,15 +69,6 @@ module StrokeDB
 
         def decode_value(evalue)
         end
-      
-      private
-      
-        # Handy helper for many cases.
-        def map_with_encoding(doc)
-          (map(doc) or []).map do |k, v|
-            [encode_key(k), encode_value(v)]
-          end
-        end
       end
     end
   end
