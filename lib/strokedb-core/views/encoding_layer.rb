@@ -6,7 +6,10 @@ module StrokeDB
       #  * encode_key(k)
       #  * decode_key(ek)
       #  * encode_value(v)
-      #  * decode_key(ev)
+      #  * decode_value(ev)
+      #
+      # encode_* methods are called in the map(doc) method.
+      # decode_* methods are used in find(...) postprocessing code.
       #
       module EncodingLayer
 
