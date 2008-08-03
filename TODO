@@ -9,6 +9,7 @@ repositories:
   raw uuid storage (+uuid conversion)
 views:
   specs for all layers!
+  on memory view
   abstract api
   connect with repository
     async view update API
