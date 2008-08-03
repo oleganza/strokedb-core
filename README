@@ -35,9 +35,29 @@ Regular versions reference only one previous_version.
 In case of merge, document references two or more previous versions.
 Document deletion is just a creation of the new version with the {"deleted"=>true} slot.
 
+== Guarantees
+
+StrokeDB doesn't guarantee reference consistency. Any document may reference any UUID, even
+not available in the repository. 
+
+
 == Views
 TODO
 
 == Synchronization (fetch and merge operations)
 TODO
+
+Common cases:
+1. Fetch a list of new documents.
+2. Fetch new revisions from the linear history.
+
+Branches must be handled efficiently as well, but the first priority is to make first two cases 
+as performant as possible.
+
+
+
+== Availability
+
+
+
 
