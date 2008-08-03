@@ -13,7 +13,7 @@ module StrokeDB
           new_pairs = map(doc)
           update_pairs(old_pairs, new_pairs)
         end
-                
+        
       end
     end
   end

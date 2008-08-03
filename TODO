@@ -1,3 +1,5 @@
+util:
+  port infinity utils from strokedb mainline (used in pretty finder views API)
 repositories:
   repo syncing
     write ahead log
