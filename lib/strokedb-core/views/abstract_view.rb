@@ -34,18 +34,13 @@ module StrokeDB
         end
         
         # Updates index with a particular document version.
-        # This method chooses which strategy to use: 
-        # update_head or update_version. Former replaces info in the view,
-        # 
+        # Returns nil.
         def update(repository, doc)
         end
         
-        # Removes previous key-value pairs, adds new ones.
-        def update_head(uuid, version, doc, prev_version, prev_doc)
-        end
-        
-        # Simply adds new key-value pairs for the particular version.
-        def update_version(uuid, version, doc)
+        # Adds new_pairs and removes old_pairs. Both arguments can be nil.
+        # Returns nil.
+        def update_pairs(new_pairs = nil, old_pairs = nil)
         end
         
         # Maps doc to a key-value view records.
