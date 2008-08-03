@@ -11,6 +11,9 @@ views:
   connect with repository
     async view update API
 networking:
+  rpc lib:
+    port here from the lfgr project
+    add support for passing object references to remote peer
   abstract async api
   async/sync rpc api:
     for repositories
