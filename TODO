@@ -8,7 +8,6 @@ repositories:
 views:
   specs for all layers!
   abstract api
-  update strategies (heads, versions)
   connect with repository
     async view update API
 networking:
