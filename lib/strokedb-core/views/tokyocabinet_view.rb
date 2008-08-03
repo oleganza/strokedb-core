@@ -6,6 +6,8 @@ module StrokeDB
         include TokyoCabinet
         attr_accessor :tc_path, :tc_bdb, :tc_bdbcur
         
+        C = "".freeze
+        
         # Opens a view with the options.
         def open(options)
           OptionsHash!(options)
@@ -20,7 +22,6 @@ module StrokeDB
         # Safely closes the view (closes file/connection or frees some resources).
         def close
           @tc_bdb.close or tc_raise("close")
-          nil
         end
         
         def find(start_key, end_key, limit, offset, reverse, with_keys)
@@ -34,20 +35,38 @@ module StrokeDB
           os = offset || 0
           results = []
           start_key_size = start_key ? start_key.size : 0
-          end_key_size   = end_key ? end_key.size : 0
+          end_key ||= C
+          end_key_size   = end_key.size
+          
           if cur.jump(start_key)
-            # We check reverse here to make loops faster.
+            # n.times{} looks cool, but works a bit slower.
             if reverse
-              # n.times{} looks cool, but works a bit slower.
-              while((os -= 1) > -1); cur.prev; end
+              while (os -= 1) > -1; cur.prev; end
             else
-              while((os -= 1) > -1); cur.next; end
+              while (os -= 1) > -1; cur.next; end
             end
+            
             # Return if offset jumped out of start_key prefix
             return results if offset and cur.key[0, start_key_size] != start_key
             
-            # TODO...
-            
+            # Now we have to move cursor in some direction, 
+            # checking end_key complience and limit.
+            i = 0
+            if reverse
+              while cur.prev
+                key = cur.key
+                key[0, end_key_size] < end_key and return results
+                (i += 1) > limit and return results
+                results.push(with_keys ? [key, cur.val] : cur.val)
+              end
+            else
+              while cur.next
+                key = cur.key
+                key[0, end_key_size] > end_key and return results
+                (i += 1) > limit and return results
+                results.push(with_keys ? [key, cur.val] : cur.val)
+              end
+            end
           end
           results
         end
@@ -57,16 +76,28 @@ module StrokeDB
         # update_head or update_version. Former replaces info in the view,
         # 
         def update(doc)
+          # TODO!
         end
         
         # Removes previous key-value pairs, adds new ones.
         def update_head(uuid, version, doc, prev_version, prev_doc)
+          # TODO!
         end
         
         # Simply adds new key-value pairs for the particular version.
         def update_version(uuid, version, doc)
           new_pairs = map(doc)
           # TODO: storage.insert(new_pairs)
+        end
+        
+        # Vanishes the storage
+        def vanish
+          @tc_bdb.vanish or tc_raise("vanish")
+        end
+        
+        # Syncs repository updates with the device
+        def sync
+          @tc_bdb.sync or tc_raise("sync")
         end
         
       private
@@ -76,7 +107,7 @@ module StrokeDB
           argsi = args.map{|a|a.inspect}.join(', ')
           raise(StorageError, "TokyoCabinet::BDB##{meth}(#{argsi}) error: %s\n" % @tc_bdb.errmsg(ecode))
         end
-      
+        
       end
     end
   end

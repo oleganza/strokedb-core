@@ -56,6 +56,14 @@ module StrokeDB
         def map(doc)
         end
         
+        # Cleans view storage
+        def vanish
+        end
+        
+        # Syncs data caches with device (FS, network link)
+        def sync
+        end
+                
         # Encoding stuff
         
         def encode_key(key)
