@@ -37,7 +37,7 @@ module StrokeDB
         # This method chooses which strategy to use: 
         # update_head or update_version. Former replaces info in the view,
         # 
-        def update(doc)
+        def update(repository, doc)
         end
         
         # Removes previous key-value pairs, adds new ones.
