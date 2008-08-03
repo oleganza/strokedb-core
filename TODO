@@ -6,11 +6,10 @@ repositories:
   json dump backend
   raw uuid storage (+uuid conversion)
 views:
-  connect with repository
-    blocking view update API
-    async view update API
   abstract api
   tokyocabinet backend
+  connect with repository
+    async view update API
 networking:
   abstract async api
   async/sync rpc api:
