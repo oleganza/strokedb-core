@@ -63,7 +63,7 @@ module StrokeDB
             return results if offset and cur.key[0, start_key_size] != start_key
             
             # Now we have to move cursor in some direction, 
-            # checking end_key complience and limit.
+            # checking end_key compliance and limit.
             i = 0
             if reverse
               while cur.prev
