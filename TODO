@@ -1,6 +1,7 @@
 util:
   port infinity utils from strokedb mainline (used in pretty finder views API)
 repositories:
+  refactor decode/encode stuff into layers (as in views)
   repo syncing
     write ahead log
   abstract async api
