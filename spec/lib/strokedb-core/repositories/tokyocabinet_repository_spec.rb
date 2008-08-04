@@ -40,13 +40,18 @@ describe "TokyoCabinetRepository with default setup" do
 
     @r.uuids_count.should == 1
     @r.versions_count.should == 2
-    
+
+    ## Iterators
     a = []
     @r.each_uuid do |uuid, doc|
       a << [uuid, doc]
     end
-    
     a.should == [[uuid, d2]]
+    
+    # iterator object
+    @r.each_uuid.map do |uuid, doc|
+      [uuid, doc]
+    end.should == [[uuid, d2]]
 
     a = []
     @r.each_version do |version, doc|
@@ -55,6 +60,10 @@ describe "TokyoCabinetRepository with default setup" do
     
     sorter = proc{|x,y| x[0]<=>y[0] }
     a.sort(&sorter).should == [[version1, d1], [version2, d2]].sort(&sorter)
+
+    @r.each_version.map do |version, doc|
+      [version, doc]
+    end.sort(&sorter).should == [[version1, d1], [version2, d2]].sort(&sorter)
     
   end
   
