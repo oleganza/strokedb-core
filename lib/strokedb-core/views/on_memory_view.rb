@@ -78,9 +78,9 @@ module StrokeDB
         # Adds new_pairs and removes old_pairs. Both arguments can be nil.
         # Returns nil.
         def update_pairs(new_pairs = nil, old_pairs = nil)
-          # bdb = @tc_bdb
-          # old_pairs.each { |k, v| bdb.out(k)    } if old_pairs
-          # new_pairs.each { |k, v| bdb.put(k, v) } if new_pairs
+          list = @ram_list
+          old_pairs.each { |k, v| ram_remove(list, k)    } if old_pairs
+          new_pairs.each { |k, v| ram_insert(list, k, v) } if new_pairs
           nil
         end
         
@@ -96,8 +96,15 @@ module StrokeDB
         end
         
       private
-      
         
+        def ram_search(list, k)
+          
+          
+        end
+        
+        def ram_insert(list, k, v)
+          
+        end
         
       end
     end
