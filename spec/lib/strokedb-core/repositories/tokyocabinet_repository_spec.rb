@@ -41,9 +41,20 @@ describe "TokyoCabinetRepository with default setup" do
     @r.uuids_count.should == 1
     @r.versions_count.should == 2
     
-    pending "iterators are missing"
+    a = []
+    @r.each do |uuid, doc|
+      a << [uuid, doc]
+    end
     
+    a.should == [[uuid, d2]]
+
+    a = []
+    @r.each_version do |version, doc|
+      a << [version, doc]
+    end
     
+    sorter = proc{|x,y| x[0]<=>y[0] }
+    a.sort(&sorter).should == [[version1, d1], [version2, d2]].sort(&sorter)
     
   end
   
