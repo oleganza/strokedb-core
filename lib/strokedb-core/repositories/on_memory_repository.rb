@@ -66,7 +66,7 @@ module StrokeDB
           @ram_heads.size
         end
 
-        def each_uuid(&blk)
+        def each(&blk)
           # TODO: each_uuid(&blk)
         end
 

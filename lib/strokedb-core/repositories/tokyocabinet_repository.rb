@@ -87,6 +87,7 @@ module StrokeDB
           @tc_hdb_index.each do |uuid, version|
             yield(uuid, decode_doc(hdb.get(version)))
           end
+          self
         end
 
         def each_version(&blk)
@@ -94,6 +95,7 @@ module StrokeDB
           @tc_hdb.each do |version, encoded_doc|
             yield(version, decode_doc(encoded_doc))
           end
+          self
         end
         
         class StorageError < Exception; end

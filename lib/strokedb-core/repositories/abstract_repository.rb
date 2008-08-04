@@ -81,7 +81,7 @@ module StrokeDB
         
         # Iterates over each UUID.
         # Returns self if block is supplied, iterator instance otherwise.
-        def each_uuid(&block)
+        def each(&block)
         end
         
         # Iterates over each version.
