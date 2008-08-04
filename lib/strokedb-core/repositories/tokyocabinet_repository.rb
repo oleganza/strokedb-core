@@ -81,8 +81,8 @@ module StrokeDB
           @tc_hdb_index.size or tc_index_raise("uuids_count")
         end
 
-        def each(&blk)
-          return UuidsIterator.new(self) unless block_given?
+        def each_uuid(&blk)
+          return Iterators::UuidsIterator.new(self) unless block_given?
           hdb = @tc_hdb
           @tc_hdb_index.each do |uuid, version|
             yield(uuid, decode_doc(hdb.get(version)))
@@ -91,7 +91,7 @@ module StrokeDB
         end
 
         def each_version(&blk)
-          return VersionsIterator.new(self) unless block_given?
+          return Iterators::VersionsIterator.new(self) unless block_given?
           @tc_hdb.each do |version, encoded_doc|
             yield(version, decode_doc(encoded_doc))
           end
@@ -99,25 +99,7 @@ module StrokeDB
         end
         
         class StorageError < Exception; end
-        
-        class Iterator
-          include Enumerable
-          attr_accessor :repo
-          def initialize(repo)
-            @repo = repo
-          end
-        end
-        class UuidsIterator < Iterator
-          def each(*args, &blk)
-            @repo.each_uuid(*args, &blk)
-          end
-        end
-        class VersionsIterator < Iterator
-          def each(*args, &blk)
-            @repo.each_version(*args, &blk)
-          end
-        end
-        
+      
       private
         
         # oleganza: 

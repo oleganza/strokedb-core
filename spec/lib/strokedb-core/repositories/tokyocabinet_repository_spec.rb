@@ -42,7 +42,7 @@ describe "TokyoCabinetRepository with default setup" do
     @r.versions_count.should == 2
     
     a = []
-    @r.each do |uuid, doc|
+    @r.each_uuid do |uuid, doc|
       a << [uuid, doc]
     end
     
