@@ -37,7 +37,7 @@ Document deletion is just a creation of the new version with the {"deleted"=>tru
 
 == Guarantees
 
-StrokeDB doesn't guarantee reference consistency. Any document may reference any UUID, even
+StrokeDB doesn't guarantee referential integrity. Any document may reference any UUID, even
 not available in the repository. 
 
 
