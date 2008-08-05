@@ -31,6 +31,8 @@ module StrokeDB
           @tc_storage.open(@tc_storage_path, mode) or tc_raise("open", @tc_storage_path, mode)
           @tc_heads.open(@tc_heads_path, mode)     or tc_heads_raise("open", @tc_heads_path, mode)
           @tc_log.open(@tc_log_path, bdbmode)      or tc_log_raise("open", @tc_log_path, bdbmode)
+          # REFACTOR THIS
+          # TODO: save repo uuid into the versions storage at the very top and ignore in the iterator.
           # brand new repository -> generate UUID for it
           if @tc_log.size == 0
             @uuid = generate_uuid(nil)
@@ -58,6 +60,15 @@ module StrokeDB
         def get_version(version)
           decode_doc(@tc_storage.get(version))
         end
+        
+        # Returns a list of documents or an empty array if nothing found
+        def get_versions(versions)
+          versions.map {|v| [v,get_version(v)] }
+        end
+        
+        def has_version?(version)
+          @tc_storage.has_key?(version)
+        end
 
         # Returns a document or nil if not found
         def get(uuid, repo_uuid = @uuid)
@@ -71,20 +82,35 @@ module StrokeDB
           decode_doc(@tc_storage.get(version))
         end
 
-        #
-        def get_versions(uuid, since)
+        # Returns ancestors for 
+        def ancestors(versions)
+          versions.inject([]) do |ancestors, version|
+            ancestors + tc_previous_versions(version)
+          end
         end
         
         # Fetches document's updates from the specified repository
-        def fetch(uuid, repo)
-          
+        def fetch(uuid, repo, repo_uuid = nil)
+          repo_uuid ||= repo.uuid
+          missing_versions = [repo.head(uuid, repo_uuid)].compact
+          while true
+            missing_versions = missing_versions.select do |mv|
+              !has_version?(mv)
+            end
+            break if missing_versions.empty?
+            docs = repo.get_versions(missing_versions)
+            docs.each do |v,doc|
+              store(v, uuid, doc, repo_uuid)
+            end
+            missing_versions = repo.ancestors(missing_versions)
+          end
         end
         
         # Stores doc in a repository. Returns nil.
-        def store(version, uuid, doc)
+        def store(version, uuid, doc, repo_uuid = @uuid)
           encoded_doc = encode_doc(doc)
           @tc_storage.put(version, encoded_doc) or tc_raise("put", version, encoded_doc)
-          @tc_heads.put(uuid + @uuid, version) or tc_heads_raise("put", uuid, version)
+          @tc_heads.put(uuid + repo_uuid, version) or tc_heads_raise("put", uuid, version)
           nil
         end
         
@@ -159,6 +185,17 @@ module StrokeDB
           argsi = args.map{|a|a.inspect}.join(', ')
           raise(StorageError, "TokyoCabinet::BDB(log)##{meth}(#{argsi}) error: %s\n" % @tc_log.errmsg(ecode))
         end
+        
+        def tc_previous_versions(version)
+          # TODO: make an index for this stuff
+          v = get_version(version)["previous_version"]
+          if v
+            Array === v ? v : [v]
+          else
+            []
+          end
+        end
+        
       end
     end # Repositories
   end # Core
