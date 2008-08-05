@@ -2,9 +2,9 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
 require 'strokedb-core'
 include StrokeDB::Core
 
-puts StrokeDB::Core::VERSION
+dir = File.dirname(__FILE__)
 
-MyDatabase = StrokeObjects::DatabaseMixin.new(:path => "vkontakte_api.strokedb")
+MyDatabase = StrokeObjects::DatabaseMixin.new(:path => File.join(dir, "vkontakte_api.strokedb"))
 
 class Audio
   include MyDatabase
