@@ -10,14 +10,14 @@ module StrokeDB
           yield(self) if block_given?
         end
         
+        Cuuid = "uuid"
         def save
           repo = @strokedb_mixin.repo
-          if sdoc = @strokedb_doc
-            version = repo.put(sdoc["uuid"], sdoc)
+          sdoc = @strokedb_doc
+          if sdoc[Cuuid]
+            version = repo.put(sdoc[Cuuid], sdoc)
           else
-            @strokedb_doc = sdoc = @strokedb_repo.new_document
-            @strokedb_doc["class"] = self.class.name
-            uuid, version = strokedb_mixin.repo.post(sdoc)
+            uuid, version = repo.post(sdoc)
           end
           true
         end
@@ -43,6 +43,10 @@ module StrokeDB
         
         def [](slotname)
           
+        end
+        
+        def marshal_dump
+          ""
         end
         
       end

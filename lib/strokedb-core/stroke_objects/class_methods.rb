@@ -12,6 +12,7 @@ module StrokeDB
         def new(options = {}, *args, &blk)
           obj = super(options, *args, &blk)
           obj.strokedb_mixin = strokedb_mixin
+          obj.strokedb_doc = strokedb_mixin.repo.new_document
           obj
         end
         
