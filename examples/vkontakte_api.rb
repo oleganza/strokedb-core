@@ -17,3 +17,6 @@ class Album
   
 end
 
+baby = Audio.create(:artist => "Nouvelle Vague", :title => "Baby")
+
+

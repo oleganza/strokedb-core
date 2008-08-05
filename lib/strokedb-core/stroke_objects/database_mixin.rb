@@ -10,11 +10,20 @@ module StrokeDB
       #   :nsurl      Optional NSURL string used to generate UUIDs for classes (SHA-1(nsurl + class.name))
       #               Default is "http://localhost/"
       class DatabaseMixin < Module
-        attr_accessor :repo, :path
+        attr_reader :repo, :path
+        attr_reader :extend_with_class_methods
+        
+        include InstanceMethods
+        
+        DEFAULT_OPTIONS = {
+          :extend_with_class_methods => true,
+          :nsurl                     => "http://localhost/"
+        }
         
         def initialize(options)
-          OptionsHash!(options)
+          OptionsHash!(options, DEFAULT_OPTIONS)
           
+          @extend_with_class_methods = options["extend_with_class_methods"]
           @path = options.require("path")
           FileUtils.mkdir_p(@path)
           repo_path = File.join(@path, "repository")
@@ -33,7 +42,7 @@ module StrokeDB
         end
         
         def included(base)
-          base.extend(ClassMethods)
+          base.extend(ClassMethods) if @extend_with_class_methods
         end
         
         # This method catches slot access calls. 
@@ -41,7 +50,7 @@ module StrokeDB
         def method_missing(meth, *args, &blk)
           # TODO
         end
-        
+
       end
     end
   end

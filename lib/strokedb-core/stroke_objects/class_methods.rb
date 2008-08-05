@@ -10,7 +10,7 @@ module StrokeDB
         def new
         end
         
-        def create
+        def create(options)
         end
 
       end
