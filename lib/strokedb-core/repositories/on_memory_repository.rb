@@ -23,8 +23,8 @@ module StrokeDB
         end
 
         # Returns the latest version for the given UUID
-        def head(uuid)
-          @ram_heads[uuid]
+        def head(uuid, ruuid = @uuid)
+          @ram_heads[uuid + ruuid]
         end
         
         # Returns a document or nil if not found
@@ -33,8 +33,8 @@ module StrokeDB
         end
 
         # Returns a document or nil if not found
-        def get(uuid)
-          version = @ram_heads[uuid] or return nil
+        def get(uuid, ruuid = @uuid)
+          version = @ram_heads[uuid + ruuid] or return nil
           decode_doc(@ram_versions[version])
         end
         
@@ -42,7 +42,7 @@ module StrokeDB
         def store(version, uuid, doc)
           encoded_doc = encode_doc(doc)
           @ram_versions[version] = encoded_doc
-          @ram_heads[uuid] = version
+          @ram_heads[uuid + @uuid] = version
           nil
         end
         

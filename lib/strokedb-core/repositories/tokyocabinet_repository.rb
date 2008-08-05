@@ -50,8 +50,8 @@ module StrokeDB
         end
 
         # Returns the latest version for the given UUID
-        def head(uuid)
-          @tc_heads.get(uuid)
+        def head(uuid, repo_uuid = @uuid)
+          @tc_heads.get(uuid + repo_uuid)
         end
         
         # Returns a document or nil if not found
@@ -60,22 +60,31 @@ module StrokeDB
         end
 
         # Returns a document or nil if not found
-        def get(uuid)
+        def get(uuid, repo_uuid = @uuid)
           # Note:
           # We do not call head(uuid) here because it might be 
           # a completely different method in a stack of modules.
           # For refactoring purposes you must use custom private
           # methods with some module-specific prefix 
           # (like "tc_" for tokyocabinet)
-          version = @tc_heads.get(uuid) or return nil
+          version = @tc_heads.get(uuid + repo_uuid) or return nil
           decode_doc(@tc_storage.get(version))
+        end
+
+        #
+        def get_versions(uuid, since)
+        end
+        
+        # Fetches document's updates from the specified repository
+        def fetch(uuid, repo)
+          
         end
         
         # Stores doc in a repository. Returns nil.
         def store(version, uuid, doc)
           encoded_doc = encode_doc(doc)
           @tc_storage.put(version, encoded_doc) or tc_raise("put", version, encoded_doc)
-          @tc_heads.put(uuid, version) or tc_heads_raise("put", uuid, version)
+          @tc_heads.put(uuid + @uuid, version) or tc_heads_raise("put", uuid, version)
           nil
         end
         
@@ -108,8 +117,11 @@ module StrokeDB
         def each_head(&blk)
           return Iterators::UuidsIterator.new(self) unless block_given?
           hdb = @tc_storage
-          @tc_heads.each do |uuid, version|
-            yield(uuid, decode_doc(hdb.get(version)))
+          uuid_size = generate_uuid(nil).size
+          @tc_heads.each do |uuid_repouuid, version|
+            uuid = uuid_repouuid[0, uuid_size]
+            repo_uuid = uuid_repouuid[uuid_size, uuid_size]
+            yield(uuid, repo_uuid, decode_doc(hdb.get(version)))
           end
           self
         end
