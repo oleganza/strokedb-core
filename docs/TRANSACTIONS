@@ -1,0 +1,74 @@
+
+Background
+
+StrokeDB 0.0.2 has a feature: 
+1. first time you update document contents new version is generated. 
+2. when document references another one, full uuid+version reference is stored.
+
+Example: 
+
+movie    = find(...)
+director = find(...)
+movie["director"] = director    # here new version for movie is issued
+director["movies"] = [ movie ]  # here new version for director is issued
+movie["year"] = 2008            # version number is not updated
+
+director.save  # contains the correct verson of movie since it was changed and version is up to date.
+movie.save     # (!) contains a reference to director version without "movies" slot
+
+
+StrokeDB 0.1 comes with a new concept of repositories.
+
+The idea is to change the version of document on every atomic slot update. 
+Each doc['slot'] = smth operation issues a new version, which is stored in some kind of 
+opaque repository, which is flushed on explicit save into low-level repository.
+This allows many interesting things like cascade transactions and more consistent API
+(no more "was_changed" flags and other messy workarounds), but introduces new challenges:
+
+1. What about partial commit? When we'd like to commit some documents and continue working with others.
+   The interesting thing about this problem is that it covers the problem of partial repositories'
+   synchronization.
+2. What about tons of versions we don't really need? I can imagine 3 cases:
+  1) We want all versions to be stored in the "opaque" repository and be flushed into real one.
+  2) We want to keep all intermediate versions in the "opaque" repository only, but
+     discard all but the last one when commiting changes into the lower-level repository.
+  3) We don't want to keep intermediate versions, but rather effectively discard them on the fly,
+     keeping only edge version.
+
+  In my opinion, all of these options should be considered. Let's give them names:
+  1) StoreVersionsStrategy
+  2) FlattenVersionsStrategy
+  3) NoVersionsStrategy
+  
+3. How to resolve cross references? Do we really want to have atomic mutual 
+   references when a.v1 references b.v2 and vice versa? In git-like system, where
+   version number is a irreversible function of contents (like SHA-1), this is 
+   generally not possible at all.
+   Anyway, if we do freeze referenced versions for each document one by one,
+   we don't have to suffer of any unexpected behaviour:
+   
+   movie    = find(...)            # movie.v1
+   director = find(...)            # director.v1
+   movie["director"] = director    # movie.v2 created
+   director["movies"] = [ movie ]  # director.v2 created with reference to movie.v2
+   movie["year"] = 2008            # movie.v3 created
+   
+   director.save  # We can do several things here (depends on repository logic):
+                  # 1. Store a version for movie without year=2008 pair (movie.v2).
+                  #    Hence, we have to store this movie version in the underlying repository.
+                  #    But we don't need to traverse the whole document before save to update versions.
+                  # 2. Store the latest possible version of movie (movie.v3)
+                  #    We have to store the movie.v3 version in the underlying repository.
+                  #    We need to traverse the whole document before save in order to forward all
+                  #    neccessary versions.
+                  # 3. Store the latest version, currently in the repository: movie.v1
+                  #    In this case we don't have neither to store references implicitely, nor
+                  #    traverse the document before save. The only thing we have to do is to store
+                  #    the origin repostory's movie version somewhere.
+
+    For now we can implement references without versions - UUIDs only.
+
+    
+
+
+
