@@ -28,8 +28,14 @@ module StrokeDB
           end
         end
         
+        def included(base)
+          base.extend(ClassMethods)
+        end
+        
+        # This method catches slot access calls. 
+        # Slots are created on the fly.
         def method_missing(meth, *args, &blk)
-          
+          # TODO
         end
         
       end

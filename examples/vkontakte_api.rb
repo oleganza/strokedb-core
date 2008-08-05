@@ -4,16 +4,16 @@ include StrokeDB::Core
 
 puts StrokeDB::Core::VERSION
 
-ApplicationDatabase = StrokeObjects::DatabaseMixin.new(:path => "vkontakte_api.strokedb")
+MyDatabase = StrokeObjects::DatabaseMixin.new(:path => "vkontakte_api.strokedb")
 
 class Audio
-  include ApplicationDatabase
+  include MyDatabase
   
   
 end
 
 class Album
-  include ApplicationDatabase
+  include MyDatabase
   
 end
 
