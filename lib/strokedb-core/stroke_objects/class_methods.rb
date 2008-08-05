@@ -5,12 +5,15 @@ module StrokeDB
       module ClassMethods
         
         def find
+          
         end
         
-        def new
+        def new(options = {})
+          
         end
         
-        def create(options)
+        def create(options = {})
+          
         end
 
       end

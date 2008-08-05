@@ -8,15 +8,15 @@ MyDatabase = StrokeObjects::DatabaseMixin.new(:path => File.join(dir, "vkontakte
 
 class Audio
   include MyDatabase
-  
-  
 end
 
 class Album
   include MyDatabase
-  
 end
 
-baby = Audio.create(:artist => "Nouvelle Vague", :title => "Baby")
+baby = Util.verify{ Audio.create(:artist => "Nouvelle Vague", :title => "Baby") }
+summer = Audio.new(:artist => "Regina Spektor", :title => "Summer In The City")
+
+Util.verify{ summer.save }
 
 
