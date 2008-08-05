@@ -72,7 +72,7 @@ module StrokeDB
         end
         
         # Syncs repository updates with the device.
-        def device_sync
+        def iosync
         end
         
         # Returns number of versions in a repository.

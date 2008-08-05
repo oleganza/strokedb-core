@@ -123,7 +123,7 @@ module StrokeDB
         end
         
         # Syncs repository updates with the device
-        def device_sync
+        def iosync
           @tc_storage.sync or tc_raise("sync")
           @tc_log.sync or tc_log_raise("sync")
           @tc_heads.sync or tc_heads_raise("sync")

@@ -54,7 +54,7 @@ module StrokeDB
         end
         
         # Syncs repository updates with the device
-        def device_sync
+        def iosync
           nil
         end
         
