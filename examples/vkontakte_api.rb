@@ -10,7 +10,7 @@ class Audio
   include MyDatabase
 end
 
-class Album
+class PhotoAlbum
   include MyDatabase
 end
 

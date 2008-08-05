@@ -13,8 +13,6 @@ module StrokeDB
         attr_reader :repo, :path
         attr_reader :extend_with_class_methods
         
-        include InstanceMethods
-        
         DEFAULT_OPTIONS = {
           :extend_with_class_methods => true,
           :nsurl                     => "http://localhost/"
@@ -42,15 +40,11 @@ module StrokeDB
         end
         
         def included(base)
+          base.send(:include, InstanceMethods)
           base.extend(ClassMethods) if @extend_with_class_methods
+          base.stroke_mixin = self
         end
         
-        # This method catches slot access calls. 
-        # Slots are created on the fly.
-        def method_missing(meth, *args, &blk)
-          # TODO
-        end
-
       end
     end
   end

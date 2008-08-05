@@ -3,19 +3,24 @@ module StrokeDB
     module StrokeObjects
       # DatabaseMixin mixes this module into the class, it is included to.
       module ClassMethods
+        attr_accessor :stroke_mixin
         
         def find
           
         end
         
-        def new(options = {})
-          
+        def new(options = {}, *args, &blk)
+          obj = super(options, *args, &blk)
+          obj.strokedb_mixin = strokedb_mixin
+          obj
         end
         
-        def create(options = {})
-          
+        def create(*args, &blk)
+          obj = new(*args, &blk)
+          obj.save
+          obj
         end
-
+        
       end
     end
   end
