@@ -1,5 +1,3 @@
-require 'tokyocabinet'
-
 module StrokeDB
   module Core
     module Repositories
