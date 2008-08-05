@@ -15,6 +15,7 @@ describe "TokyoCabinetRepository with default setup" do
   end 
   
   it "should create/read/updated/delete" do 
+    @r.uuid.should =~ UUID_RE
     d0 = @r.new_document
     uuid, version1 = @r.post(d0.dup)
     uuid.should =~ UUID_RE
@@ -38,7 +39,7 @@ describe "TokyoCabinetRepository with default setup" do
     d2["version"].should == version2
     d2["previous_version"].should == version1
 
-    @r.uuids_count.should == 1
+    @r.heads_count.should == 1
     @r.versions_count.should == 2
 
     ## Iterators
