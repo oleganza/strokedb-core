@@ -7,9 +7,9 @@ identity/*
 TAGS
 *.swp
 .*.strokedb
-examples/.*.strokedb
-examples/.*.strokedb/
-examples/.*.strokedb/*
+examples/*.strokedb
+examples/*.strokedb/
+examples/*.strokedb/*
 pkg
 strokedb.gemspec
 spec/temp
