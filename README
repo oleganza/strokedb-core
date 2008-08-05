@@ -57,6 +57,38 @@ Fetch contexts:
 1. Occasional fetch (hourly, daily etc.)
 2. Streamed syncing (i.e. master-slave replication)
 
+
+The concept.
+
+1. Every repository is identified by UUID.
+2. Every repository writes a log of commits.
+3. Commit tuples:
+   (timestamp, "store", uuid, version)
+   (timestamp, "pull",  repo_uuid, repo_timestamp)
+4. When you pull from a repository:
+   1. Find out the latest timestamp in your history (index: repo_uuid -> repo_timestamp)
+   2. If there is not timestamp yet, pull the whole log.
+   3. If there is a timestamp for a repository UUID, pull the tail of the log.
+   4. For each "store" record: fetch the version.
+   5. For each "pull" record - add to a deferred list of repositories waiting for update.
+   6. When whole log is fetched, fetch deferred repositories. We have two options here:
+     1. Fetch from the same repository we've been fetching from few moments ago (say, fetch B log from A)
+     2. Or, fetch directly from the desired repository (B log from B repository)
+
+Partial fetches.
+
+Repository may expose only limited set of documents for synchronization, specified with a view.
+Thus, the view needs to run an update log.
+
+TODO: how to efficiently determine which versions are already fetched?
+
+Security.
+
+We may add git-like security features this way:
+1. Each version number is a UUIDv5 (SHA-1) of the doc's content.
+2. Each subsequent doc UUID is a UUIDv5 for previous commit content.
+   
+   
 == Availability
 
 
