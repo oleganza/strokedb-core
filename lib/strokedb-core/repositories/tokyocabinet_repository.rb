@@ -12,7 +12,7 @@ module StrokeDB
         def open(options)
           OptionsHash!(options)
           @tc_path         = options.require("path")
-          @tc_storage_path = @tc_path
+          @tc_storage_path = options["storage_path"] || (@tc_path + ".versions")
           @tc_heads_path   = options["heads_path"] || (@tc_path + ".heads")
           @tc_log_path     = options["log_path"] || (@tc_path + ".log")
           @tc_storage = HDB::new
