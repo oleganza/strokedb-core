@@ -16,6 +16,7 @@ describe "TokyoCabinetRepository with default setup" do
   
   it "should create/read/updated/delete" do 
     @r.uuid.should =~ UUID_RE
+    
     d0 = @r.new_document
     uuid, version1 = @r.post(d0.dup)
     uuid.should =~ UUID_RE

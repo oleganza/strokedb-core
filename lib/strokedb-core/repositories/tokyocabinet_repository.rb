@@ -12,7 +12,11 @@ module StrokeDB
         
         REPO_UUID_TOKEN = "STROKEDB REPOSITORY UUID"
         
-        # Opens a repository
+        # Opens a repository.
+        # Class uses 3 files:
+        # * storage -- a list of (version -> contents) pairs
+        # * heads -- a list of (uuid -> head version) pairs
+        # * log -- a list of (uuid, timestamp)
         def open(options)
           OptionsHash!(options)
           @tc_path         = options.require("path")
@@ -27,7 +31,7 @@ module StrokeDB
           @tc_storage.open(@tc_storage_path, mode) or tc_raise("open", @tc_storage_path, mode)
           @tc_heads.open(@tc_heads_path, mode)     or tc_heads_raise("open", @tc_heads_path, mode)
           @tc_log.open(@tc_log_path, bdbmode)      or tc_log_raise("open", @tc_log_path, bdbmode)
-          # brand new repository
+          # brand new repository -> generate UUID for it
           if @tc_log.size == 0
             @uuid = generate_uuid(nil)
             @tc_log.put(REPO_UUID_TOKEN, @uuid)
@@ -84,7 +88,7 @@ module StrokeDB
         end
         
         # Syncs repository updates with the device
-        def sync
+        def device_sync
           @tc_storage.sync or tc_raise("sync")
           @tc_log.sync or tc_log_raise("sync")
           @tc_heads.sync or tc_heads_raise("sync")
