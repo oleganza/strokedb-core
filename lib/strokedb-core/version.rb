@@ -1,11 +1,13 @@
 module StrokeDB
   module Core
-          MAIN = 0
-         MAJOR = 1
-         MINOR = 0
-    PATCHLEVEL = 0
-  
-    VERSION = [MAIN.to_s, MAJOR.to_s, MINOR.to_s, PATCHLEVEL.to_s].join('.')
-    VERSION_STRING = VERSION + (RUBY_PLATFORM =~ /java/ ? '-java' : '')
+    VERSION = '0.1.0' unless defined?(StrokeDB::Core::VERSION)
+
+    # StrokeDB::Core::RELEASE meanings:
+    # 'dev'   : unreleased
+    # 'pre'   : pre-release Gem candidates
+    #  nil    : released
+    # You should never check in to trunk with this changed.  It should
+    # stay 'dev'.  Change it to nil in release tags.
+    RELEASE = 'dev' unless defined?(StrokeDB::Core::RELEASE)
   end
 end
