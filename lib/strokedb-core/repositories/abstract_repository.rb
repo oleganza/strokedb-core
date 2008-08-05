@@ -30,6 +30,10 @@ module StrokeDB
         def close
         end
       
+        # Returns repo's UUID
+        def uuid
+        end
+        
         # Returns a document by version.
         def get_version(version)
         end

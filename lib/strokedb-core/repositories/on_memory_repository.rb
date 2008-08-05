@@ -4,12 +4,14 @@ module StrokeDB
   module Core
     module Repositories
       module OnMemoryRepository
+        attr_reader :uuid
         attr_accessor :ram_versions, :ram_heads
         
         # Opens a repository
         def open(options)
           @ram_versions = Hash.new
           @ram_heads    = Hash.new
+          @uuid = generate_uuid(nil)
           nil
         end
       

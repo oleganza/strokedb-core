@@ -5,8 +5,12 @@ module StrokeDB
     module Repositories
       module TokyoCabinetRepository
         include TokyoCabinet
-        attr_accessor :tc_path, :tc_storage_path, :tc_heads_path, :tc_log_path
-        attr_accessor           :tc_storage,      :tc_heads,      :tc_log
+        attr_reader :uuid
+        attr_reader :tc_path
+        attr_reader :tc_storage_path, :tc_heads_path, :tc_log_path
+        attr_reader :tc_storage,      :tc_heads,      :tc_log
+        
+        REPO_UUID_TOKEN = "STROKEDB REPOSITORY UUID"
         
         # Opens a repository
         def open(options)
@@ -23,6 +27,13 @@ module StrokeDB
           @tc_storage.open(@tc_storage_path, mode) or tc_raise("open", @tc_storage_path, mode)
           @tc_heads.open(@tc_heads_path, mode)     or tc_heads_raise("open", @tc_heads_path, mode)
           @tc_log.open(@tc_log_path, bdbmode)      or tc_log_raise("open", @tc_log_path, bdbmode)
+          # brand new repository
+          if @tc_log.size == 0
+            @uuid = generate_uuid(nil)
+            @tc_log.put(REPO_UUID_TOKEN, @uuid)
+          else
+            @uuid = @tc_log.get(REPO_UUID_TOKEN) or tc_log_raise("get", REPO_UUID_TOKEN)
+          end
           nil
         end
       

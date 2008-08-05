@@ -13,7 +13,7 @@ module StrokeDB
         end
         class UuidsIterator < Iterator
           def each(*args, &blk)
-            @repo.each_uuid(*args, &blk)
+            @repo.each_head(*args, &blk)
           end
         end
         class VersionsIterator < Iterator
