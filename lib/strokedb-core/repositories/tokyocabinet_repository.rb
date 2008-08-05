@@ -68,12 +68,14 @@ module StrokeDB
         def vanish
           @tc_storage.vanish or tc_raise("vanish")
           @tc_heads.vanish or tc_heads_raise("vanish")
+          @tc_log.vanish or tc_log_raise("vanish")
           nil
         end
         
         # Syncs repository updates with the device
         def sync
           @tc_storage.sync or tc_raise("sync")
+          @tc_log.sync or tc_log_raise("sync")
           @tc_heads.sync or tc_heads_raise("sync")
           nil
         end
@@ -84,11 +86,11 @@ module StrokeDB
         end
         
         # Returns number of UUIDs stored in a repository
-        def uuids_count
+        def heads_count
           @tc_heads.size or tc_heads_raise("uuids_count")
         end
 
-        def each_uuid(&blk)
+        def each_head(&blk)
           return Iterators::UuidsIterator.new(self) unless block_given?
           hdb = @tc_storage
           @tc_heads.each do |uuid, version|

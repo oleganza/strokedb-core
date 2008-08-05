@@ -62,11 +62,11 @@ module StrokeDB
         end
         
         # Returns number of UUIDs stored in a repository
-        def uuids_count
+        def heads_count
           @ram_heads.size
         end
 
-        def each(&blk)
+        def each_head(&blk)
           # TODO: each_uuid(&blk)
         end
 

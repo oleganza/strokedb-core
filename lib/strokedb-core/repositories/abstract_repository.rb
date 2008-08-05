@@ -76,12 +76,12 @@ module StrokeDB
         end
         
         # Returns number of UUIDs stored in a repository.
-        def uuids_count
+        def heads_count
         end
         
         # Iterates over each UUID.
         # Returns self if block is supplied, iterator instance otherwise.
-        def each_uuid(&block)
+        def each_head(&block)
         end
         
         # Iterates over each version.

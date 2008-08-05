@@ -43,13 +43,13 @@ describe "TokyoCabinetRepository with default setup" do
 
     ## Iterators
     a = []
-    @r.each_uuid do |uuid, doc|
+    @r.each_head do |uuid, doc|
       a << [uuid, doc]
     end
     a.should == [[uuid, d2]]
     
     # iterator object
-    @r.each_uuid.map do |uuid, doc|
+    @r.each_head.map do |uuid, doc|
       [uuid, doc]
     end.should == [[uuid, d2]]
 
