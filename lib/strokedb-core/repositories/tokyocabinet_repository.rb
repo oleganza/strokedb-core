@@ -82,6 +82,7 @@ module StrokeDB
           decode_doc(@tc_storage.get(version))
         end
 
+        # TODO: refactor this into separate layer
         # Returns ancestors for 
         def ancestors(versions)
           versions.inject([]) do |ancestors, version|
@@ -89,6 +90,7 @@ module StrokeDB
           end
         end
         
+        # TODO: refactor this into separate layer
         # Fetches document's updates from the specified repository
         def fetch(uuid, repo, repo_uuid = nil)
           repo_uuid ||= repo.uuid
@@ -105,6 +107,29 @@ module StrokeDB
             missing_versions = repo.ancestors(missing_versions)
           end
         end
+
+        # TODO: refactor this into separate layer
+        # We try to find the latest HEAD
+        def push(uuid, repo, from_repo_uuid = nil, to_repo_uuid = nil)
+          from_repo_uuid ||= @uuid
+          to_repo_uuid ||= repo.uuid
+          remote_head = repo.head(uuid, to_repo_uuid)
+          # TODO: receiver must store received versions somewhere, 
+          #       then try fast-forward merge or report an error.
+          #       Find out what this "somewhere" is. Maybe, a temporary
+          #       repo/branch.
+        end
+        
+        # TODO: refactor this into separate layer
+        # Merges a document from the specified repo branch to the current branch
+        def merge(uuid, repo_uuid)
+          v1 = head(uuid, @uuid)
+          v2 = head(uuid, repo_uuid)
+          ca = common_ancestor(v1, v2)
+          
+          
+        end
+  
         
         # Stores doc in a repository. Returns nil.
         def store(version, uuid, doc, repo_uuid = @uuid)
