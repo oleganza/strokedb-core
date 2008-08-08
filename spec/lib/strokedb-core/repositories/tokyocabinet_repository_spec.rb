@@ -2,7 +2,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
 describe "TokyoCabinetRepository with default setup" do
   before(:all) do
-    @r = ClassFactory.new(Repositories::DefaultUuidHelpers, 
+    @r = ClassFactory.new(Repositories::AbstractHelpers,
+                          Repositories::DefaultUuidHelpers, 
                           Repositories::HashHelper, 
                           Repositories::MarshalHelper, 
                           Repositories::TokyoCabinetRepository,
@@ -18,7 +19,8 @@ describe "TokyoCabinetRepository with default setup" do
     @r.uuid.should =~ UUID_RE
     
     d0 = @r.new_document
-    uuid, version1 = @r.post(d0.dup)
+    uuid = d0["uuid"]
+    version1 = @r.post(d0.dup)
     uuid.should =~ UUID_RE
     version1.should =~ UUID_RE
     

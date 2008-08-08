@@ -4,12 +4,9 @@ module StrokeDB
       module HashHelper
 
         def new_document
-          { }
+          { "uuid" => generate_uuid(nil) }
         end
-        
-        def new_deleted_document
-          { "deleted" => true }
-        end
+
       end
     end # Repositories
   end # Core

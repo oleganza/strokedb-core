@@ -30,6 +30,7 @@ module StrokeDB
           bdbmode = BDB::OWRITER | BDB::OCREAT 
           @tc_storage.open(@tc_storage_path, mode) or tc_raise("open", @tc_storage_path, mode)
           @tc_heads.open(@tc_heads_path, mode)     or tc_heads_raise("open", @tc_heads_path, mode)
+          # FIXME: i don't really  think we need this log file right now.
           @tc_log.open(@tc_log_path, bdbmode)      or tc_log_raise("open", @tc_log_path, bdbmode)
           # REFACTOR THIS
           # TODO: save repo uuid into the versions storage at the very top and ignore in the iterator.

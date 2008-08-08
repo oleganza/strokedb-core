@@ -60,12 +60,6 @@ module StrokeDB
         # Returns version.
         def put(uuid, doc)
         end
-
-        # Mostly the same as put()
-        # Saves {deleted: true} version, removes document from indexes.
-        # Returns version.
-        def delete(uuid)
-        end
         
         # Vanishes the storage.
         def vanish

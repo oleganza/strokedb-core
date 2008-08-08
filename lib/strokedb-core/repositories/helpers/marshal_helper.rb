@@ -4,11 +4,11 @@ module StrokeDB
       module MarshalHelper
 
         def encode_doc(doc)
-          Marshal.dump(doc)
+          super(Marshal.dump(doc))
         end
       
         def decode_doc(encoded_doc)
-          Marshal.load(encoded_doc)
+          Marshal.load(super(encoded_doc))
         end
       end
     end # Repositories

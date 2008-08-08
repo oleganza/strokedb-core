@@ -6,7 +6,7 @@ module StrokeDB
         def generate_version(doc)
           Util::random_uuid
         end
-
+        
         def generate_uuid(doc)
           Util::random_uuid
         end
