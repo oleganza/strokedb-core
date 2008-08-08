@@ -24,6 +24,9 @@ describe "TokyoCabinetRepository with default setup" do
     uuid.should =~ UUID_RE
     version1.should =~ UUID_RE
     
+    d404 = @r.get(@r.generate_uuid(nil))
+    d404.should == nil
+    
     d1 = @r.get(uuid)
     d1["uuid"].should == uuid
     d1["version"].should == version1

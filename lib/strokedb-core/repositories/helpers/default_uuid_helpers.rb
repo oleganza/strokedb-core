@@ -7,7 +7,7 @@ module StrokeDB
           Util::random_uuid
         end
         
-        def generate_uuid(doc)
+        def generate_uuid(doc = nil)
           Util::random_uuid
         end
       end

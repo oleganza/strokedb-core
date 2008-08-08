@@ -8,7 +8,7 @@ module StrokeDB
         end
 
         # Must accept nil (for new documents)
-        def generate_uuid(doc)
+        def generate_uuid(doc = nil)
         end
       
         # Encodes document before serialization.
