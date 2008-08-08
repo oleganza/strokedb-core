@@ -52,15 +52,10 @@ module StrokeDB
         end
         
         # Adds "uuid", "version" fields to a hash before save.
-        # Returns a [uuid, version].
-        def post(doc)
+        # Returns a version.
+        def put(doc)
         end
 
-        # Sets "previous_version" := "version", "version" := new version before save.
-        # Returns version.
-        def put(uuid, doc)
-        end
-        
         # Vanishes the storage.
         def vanish
         end

@@ -20,7 +20,7 @@ describe "TokyoCabinetRepository with default setup" do
     
     d0 = @r.new_document
     uuid = d0["uuid"]
-    version1 = @r.post(d0.dup)
+    version1 = @r.put(d0.dup)
     uuid.should =~ UUID_RE
     version1.should =~ UUID_RE
     
@@ -36,7 +36,7 @@ describe "TokyoCabinetRepository with default setup" do
     d1["uuid"].should == uuid
     d1["version"].should == version1
     
-    version2 = @r.put(uuid, d1.dup)
+    version2 = @r.put(d1.dup)
     version2.should =~ UUID_RE
     
     d2 = @r.get_version(version2)
