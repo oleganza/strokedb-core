@@ -21,6 +21,7 @@ class User
   include MyDatabase # should be included into classes only!
   validate_presence_of :name
   before_save :some_method
+  has_many :photo_albums
   
   def some_method
     
