@@ -34,7 +34,7 @@ module StrokeDB
         end
         def backtrace
           return super unless @exception
-          @exception.backtrace[1..-1]
+          @exception.backtrace
         end
       end
     end
