@@ -1,24 +1,24 @@
 module StrokeDB
   module Core
     module StrokeObjects
-      # This module is mixed in DatabaseMixin, thus it is mixed into every model class.
+      # This module is mixed in Database mixin, thus it is mixed into every model class.
       module InstanceMethods
-        attr_accessor :strokedb_doc, :strokedb_mixin
+        Cuuid = "uuid"
+        Cversion = "version"
         
-        def initialize(options, &blk)
-          @options = OptionsHash!(options.dup)
+        attr_accessor :strokedb_database
+        attr_accessor :strokedb_slots
+        
+        # Initialized with a set of slots
+        def initialize(db, slots, &blk)
+          @strokedb_database = db
+          @strokedb_slots = OptionsHash!(slots.dup)
           yield(self) if block_given?
         end
-        
-        Cuuid = "uuid"
+
         def save
-          repo = @strokedb_mixin.repo
-          sdoc = @strokedb_doc
-          if sdoc[Cuuid]
-            version = repo.put(sdoc[Cuuid], sdoc)
-          else
-            uuid, version = repo.post(sdoc)
-          end
+          repo = @strokedb_database.repo
+          repo.put(@strokedb_slots)
           true
         end
 
@@ -38,17 +38,26 @@ module StrokeDB
         end
         
         def []=(slotname, value)
-          
+          @strokedb_slots[slotname.to_s] = value
         end
         
         def [](slotname)
-          
+          @strokedb_slots[slotname.to_s]
         end
         
         def marshal_dump
-          ""
+          @strokedb_slots
         end
         
+        # TODO: think how the db connection should be restored after the load
+        def marshal_load(slots)
+          initialize(nil, slots)
+        end
+        
+        def ==(other)
+          slots = @strokedb_slots
+          slots[Cuuid] == other.uuid && slots[Cversion] == other.version
+        end
       end
     end
   end

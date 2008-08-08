@@ -4,19 +4,47 @@ include StrokeDB::Core
 
 dir = File.dirname(__FILE__)
 
-MyDatabase = StrokeObjects::DatabaseMixin.new(:path => File.join(dir, "vkontakte_api.strokedb"))
+MyDatabase = StrokeObjects::Database.new(:path => File.join(dir, ".vkontakte_api.strokedb"))
+
+module MyValidations
+#  validate_something
+end
+
+class Base
+#  validate
+end
 
 class Audio
-  include MyDatabase
+  include MyDatabase # should be included into classes only!
 end
 
 class PhotoAlbum
   include MyDatabase
 end
 
-baby = Util.verify{ Audio.create(:artist => "Nouvelle Vague", :title => "Baby") }
+include Util
+
+baby = verify{ Audio.create(:artist => "Nouvelle Vague", :title => "Baby") }
 summer = Audio.new(:artist => "Regina Spektor", :title => "Summer In The City")
 
-Util.verify{ summer.save }
+verify{ summer.save }
+
+verify{ baby.uuid =~ UUID_RE }
+verify{ baby.version }
+verify{ baby.previous_version == nil }
+verify{ baby.artist == "Nouvelle Vague" }
+verify{ baby.title == "Baby" }
+verify{ baby[:title] == "Baby" }
+verify{ baby["title"] == "Baby" }
+
+baby = verify{ Audio.find(baby.uuid) }
+
+# Find by UUID:
+verify { Audio.find(baby.uuid) == baby }
+# identity map in action:
+verify { Audio.find(baby.uuid).object_id == baby.object_id }
+
+# Find by query:
+verify { Audio.find(:uuid => baby.uuid) == baby }
 
 
