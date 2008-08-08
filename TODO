@@ -26,7 +26,15 @@ OO API
   classes (like ActiveRecord)
   metas
   autoload (lazy_mapping_array and such stuff)
+associations:
+  identity map in a repository (versions' equality must imply object_id's equality)
+  auto views
+    has one
+    has many
+    has and belongs to many
 validations:
+  inheritable validations
+  module-defined validations
   extraction into separate API
   networking:
     transferrable validations (don't repeat presence_of on server if client already checked, but check uniqueness_of)
