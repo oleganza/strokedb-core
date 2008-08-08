@@ -9,7 +9,6 @@ describe "verify", :shared => true do
   end
 end
 
-
 describe "Util.verify" do
   before(:each) do
     @context = Util
