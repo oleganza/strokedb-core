@@ -10,7 +10,7 @@ module StrokeDB
           end
           alias validate_presence_of validates_presence_of # nobody likes stupid typos
           
-          def strokedb_configured(database)
+          def strokedb_configured(*args)
             super
             @validations = []
           end

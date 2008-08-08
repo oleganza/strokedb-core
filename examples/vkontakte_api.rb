@@ -20,7 +20,7 @@ end
 class User
   include MyDatabase # should be included into classes only!
   validate_presence_of :name
-  #before_save :some_method
+  before_save :some_method
   
   def some_method
     
