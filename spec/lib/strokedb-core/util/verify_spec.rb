@@ -1,22 +1,25 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
+describe "verify", :shared => true do
+  it do
+    lambda{  @context.verify{ true }  }.should_not raise_error
+  end
+  it do
+    lambda{  @context.verify{ false }  }.should raise_error(Util::VerifyFailed)
+  end
+end
+
+
 describe "Util.verify" do
-  it do
-    lambda{  Util.verify{ true }  }.should_not raise_error
+  before(:each) do
+    @context = Util
   end
-  it do
-    lambda{  Util.verify{ false }  }.should raise_error(Util::VerifyFailed)
-  end
+  it_should_behave_like "verify"
 end
 
 describe "Util#verify" do
   before(:each) do
-    @obj = Class.new{include Util}.new
+    @context = Class.new{include Util}.new
   end
-  it do
-    lambda{  @obj.verify{ true }  }.should_not raise_error
-  end
-  it do
-    lambda{  @obj.verify{ false }  }.should raise_error(Util::VerifyFailed)
-  end
+  it_should_behave_like "verify"
 end
