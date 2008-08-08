@@ -7,6 +7,10 @@ describe "verify", :shared => true do
   it do
     lambda{  @context.verify{ false }  }.should raise_error(Util::VerifyFailed)
   end
+  it "should return the block results" do
+    obj = Object.new
+    @context.verify{ obj }.should == obj
+  end
 end
 
 describe "Util.verify" do
