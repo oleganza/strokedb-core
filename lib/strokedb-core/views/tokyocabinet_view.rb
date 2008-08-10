@@ -25,15 +25,18 @@ module StrokeDB
           @tc_bdbcur = nil
         end
         
+        MANY_0xFF = ("\xff"*8).freeze
+        
         def find(start_key, end_key, limit, offset, reverse, with_keys)
+          limit == 0 and return [] 
           
           # faster implementation for normal order finds:
-          if start_key and not reverse
+          if start_key == end_key and start_key and not reverse
             keys = @tc_bdb.fwmkeys(start_key, limit)
             if keys.size > 0
               if end_key
                 end_key_size = end_key.size
-                keys = keys[offset || 0, limit || Float::MAX].select do |key|
+                keys = (limit ? keys[offset || 0, limit] : keys[offset || 0, keys.size]).select do |key|
                   key[0, end_key_size] <= end_key
                 end
               end
@@ -50,41 +53,72 @@ module StrokeDB
           os = offset || 0
           results = []
           start_key_size = start_key ? start_key.size : 0
+          end_key_size   = end_key ? end_key.size : 0
           end_key ||= C
-          end_key_size   = end_key.size
           
-          if (start_key ? cur.jump(start_key) : cur.first)
+          if reverse
+            # We should jump to a farthest matching key.
+            # prefix: abc
+            # we start with a prefix "abc\xff\xff\xff\xff\xff\xff\xff\xff",
+            # case 0: abb, abdZZZ (jumped to abdZZZ)
+            # case 1: abb1, abb2 (jump => false)
+            # case 2: abcXXX, abcYYY, abdZZZ (jumped to abd, step back)
+            # case 3: abcXXX, abcYYY (jump => false)
+            # case 4: abcXXX, abcYYY, abc\xff\xff...suffix (move forward unless prefix == start_key)
+            if start_key
+              if cur.jump(start_key + MANY_0xFF)
+                key = cur.key
+                # matched prefix, step forward until not matched
+                if key[0, start_key_size] == start_key
+                  while cur.next and (tkey = cur.key)[0, start_key_size] == start_key
+                    key = tkey
+                  end
+                  cur.jump(key) or raise "Unexpected BDBCUR#jump failure!"
+                # prefix not matched, step back
+                else
+                  cur.prev or return [] # no previous record
+                  cur.key[0, start_key_size] == start_key or return []
+                end
+              # not jumped to a suffix. 
+              # This can happen when the last item has prefix or there's no item with such prefix.
+              else
+                (cur.last and cur.key[0, start_key_size] == start_key) or return []
+              end
+            else
+              cur.last or return []
+            end
             # n.times{} looks cool, but works a bit slower.
-            if reverse
-              while (os -= 1) > -1; cur.prev; end
-            else
-              while (os -= 1) > -1; cur.next; end
+            while (os -= 1) > -1; cur.prev or return []; end
+          else
+            (start_key ? cur.jump(start_key) : cur.first) or return []
+            while (os -= 1) > -1; cur.next or return []; end
+          end
+
+          # Return if offset jumped out of start_key prefix
+          if offset and cur.key[0, start_key_size] != start_key
+            return results
+          end
+          
+          # Now we have to move cursor in some direction, 
+          # checking end_key compliance and limit.
+          i = 0
+          results.push(with_keys ? [cur.key, cur.val] : cur.val)
+          if reverse
+            while cur.prev
+              key = cur.key
+              key[0, end_key_size] < end_key and return results
+              limit and (i += 1) > limit and return results
+              results.push(with_keys ? [key, cur.val] : cur.val)
             end
-            
-            # Return if offset jumped out of start_key prefix
-            if offset and cur.key[0, start_key_size] != start_key
-              return results
-            end
-            
-            # Now we have to move cursor in some direction, 
-            # checking end_key compliance and limit.
-            i = 0
-            if reverse
-              while cur.prev
-                key = cur.key
-                key[0, end_key_size] < end_key and return results
-                (i += 1) > limit and return results
-                results.push(with_keys ? [key, cur.val] : cur.val)
-              end
-            else
-              while cur.next
-                key = cur.key
-                key[0, end_key_size] > end_key and return results
-                (i += 1) > limit and return results
-                results.push(with_keys ? [key, cur.val] : cur.val)
-              end
+          else
+            while cur.next
+              key = cur.key
+              key[0, end_key_size] > end_key and return results
+              limit and (i += 1) > limit and return results
+              results.push(with_keys ? [key, cur.val] : cur.val)
             end
           end
+
           results
         end
                 
