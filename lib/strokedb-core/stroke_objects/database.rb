@@ -41,19 +41,26 @@ module StrokeDB
           @repository_api    = options.require("repository_api")
           @path              = options.require("path") # FIXME: support networking
           FileUtils.mkdir_p(@path)
-          repo_path = File.join(@path, "repository")
           
-          @repo = ClassFactory.new(*@repository_api).new_class.new
-          @repo.open(:path => repo_path)
-          
+          @repo_class = ClassFactory.new(*@repository_api).new_class
+          @repo = new_repo(@repo_class)
+              
           DEBUG do
             puts "#{self.class.inspect} configuration:"
             [:@extend_by_modules, :@include_modules, :@repository_api].each do |ivar|
               puts "  #{(ivar.to_s+':').ljust(20)} #{instance_variable_get(ivar).inspect}"
             end
           end
-          at_exit { @repo.close }
         end
+        
+        def new_repo(repo_class)
+          repo = repo_class.new
+          repo_path = File.join(@path, "repository")
+          repo.open(:path => repo_path)
+          at_exit { repo.close }
+          repo
+        end
+        private :new_repo
         
         def included(base)
           @extend_by_modules.each{|cm| base.extend(cm)         }

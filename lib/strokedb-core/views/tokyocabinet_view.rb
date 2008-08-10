@@ -62,7 +62,9 @@ module StrokeDB
             end
             
             # Return if offset jumped out of start_key prefix
-            return results if offset and cur.key[0, start_key_size] != start_key
+            if offset and cur.key[0, start_key_size] != start_key
+              return results
+            end
             
             # Now we have to move cursor in some direction, 
             # checking end_key compliance and limit.
