@@ -14,8 +14,8 @@ module StrokeDB
       module EncodingLayer
 
         def find(start_key, end_key, limit, offset, reverse, with_keys)
-          rs = super(start_key and encode_key(start_key), 
-                     end_key and encode_key(end_key), 
+          rs = super(start_key && encode_key(start_key), 
+                     end_key && encode_key(end_key), 
                      limit, offset, reverse, with_keys)
           if with_keys
             rs.map do |kv|

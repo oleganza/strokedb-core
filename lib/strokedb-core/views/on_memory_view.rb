@@ -84,14 +84,12 @@ module StrokeDB
           nil
         end
         
-        # Vanishes the storage
         def vanish
           @ram_list.clear
           nil
         end
         
-        # Syncs repository updates with the device
-        def sync
+        def iosync
           nil
         end
         

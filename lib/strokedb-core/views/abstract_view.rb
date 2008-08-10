@@ -61,8 +61,8 @@ module StrokeDB
         def vanish
         end
         
-        # Syncs data caches with device (FS, network link)
-        def sync
+        # Syncs data caches with the I/O device
+        def iosync
         end
 
       end

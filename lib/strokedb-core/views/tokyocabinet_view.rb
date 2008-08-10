@@ -29,11 +29,13 @@ module StrokeDB
           
           # faster implementation for normal order finds:
           if start_key and not reverse
-            keys = @tc_bdb.fwmkeys(start_key, max)
+            keys = @tc_bdb.fwmkeys(start_key, limit)
             if keys.size > 0
-              end_key_size = end_key.size
-              keys = keys[offset || 0, limit || Float::MAX].select do |key|
-                key[0, end_key_size] <= end_key
+              if end_key
+                end_key_size = end_key.size
+                keys = keys[offset || 0, limit || Float::MAX].select do |key|
+                  key[0, end_key_size] <= end_key
+                end
               end
               bdb = @tc_bdb
               if with_keys
@@ -51,7 +53,7 @@ module StrokeDB
           end_key ||= C
           end_key_size   = end_key.size
           
-          if cur.jump(start_key)
+          if (start_key ? cur.jump(start_key) : cur.first)
             # n.times{} looks cool, but works a bit slower.
             if reverse
               while (os -= 1) > -1; cur.prev; end
@@ -98,8 +100,8 @@ module StrokeDB
           @tc_bdb.vanish or tc_raise("vanish")
         end
         
-        # Syncs repository updates with the device
-        def sync
+        # Syncs repository updates with the I/O device
+        def iosync
           @tc_bdb.sync or tc_raise("sync")
         end
         
