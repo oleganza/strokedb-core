@@ -102,20 +102,21 @@ module StrokeDB
           # Now we have to move cursor in some direction, 
           # checking end_key compliance and limit.
           i = 0
-          results.push(with_keys ? [cur.key, cur.val] : cur.val)
           if reverse
-            while cur.prev
+            while true
               key = cur.key
               key[0, end_key_size] < end_key and return results
               limit and (i += 1) > limit and return results
               results.push(with_keys ? [key, cur.val] : cur.val)
+              cur.prev or return results
             end
           else
-            while cur.next
+            while true
               key = cur.key
               key[0, end_key_size] > end_key and return results
               limit and (i += 1) > limit and return results
               results.push(with_keys ? [key, cur.val] : cur.val)
+              cur.next or return results
             end
           end
 
