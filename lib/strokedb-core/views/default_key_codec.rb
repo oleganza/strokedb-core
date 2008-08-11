@@ -104,7 +104,7 @@ module StrokeDB
         C0dot = "0.".freeze
         
         def decode_key(ek)
-          values = string.split(S_).map do |token|
+          values = ek.split(S_).map do |token|
             pfx = token[0,1]
             case pfx
             when A
