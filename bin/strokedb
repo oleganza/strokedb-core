@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+development_lib = File.join(File.dirname(__FILE__), '..', 'lib')
+if File.exists? development_lib + '/strokedb-core.rb'
+  $LOAD_PATH.unshift(development_lib).uniq!
+else
+  require 'rubygems'
+end
+
+require 'strokedb-core'
+require 'strokedb-core/console'
+
+include StrokeDB::Console
+IRB.start
