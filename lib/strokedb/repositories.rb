@@ -1,9 +1,9 @@
-require 'repositories/helpers'
-require 'repositories/abstract_repository'
-require 'repositories/abstract_async_repository'
-require 'repositories/metadata_hash_layer'
-require 'repositories/iterators'
-require 'repositories/tokyocabinet_repository'
+require 'strokedb/repositories/helpers'
+require 'strokedb/repositories/abstract_repository'
+require 'strokedb/repositories/abstract_async_repository'
+require 'strokedb/repositories/metadata_hash_layer'
+require 'strokedb/repositories/iterators'
+require 'strokedb/repositories/tokyocabinet_repository'
 
 __END__
 

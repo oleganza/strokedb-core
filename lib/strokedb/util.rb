@@ -1,9 +1,9 @@
 require 'time'
-require 'util/options_hash'
-require 'util/uuid'
-require 'util/class_factory'
-require 'util/require_one_of'
-require 'util/verify'
+require 'strokedb/util/options_hash'
+require 'strokedb/util/uuid'
+require 'strokedb/util/class_factory'
+require 'strokedb/util/require_one_of'
+require 'strokedb/util/verify'
 
 module StrokeDB
   include Util

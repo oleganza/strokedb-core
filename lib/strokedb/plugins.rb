@@ -1,4 +1,4 @@
-require 'plugins/plugin.rb'
-require 'plugins/callbacks.rb'
-require 'plugins/validations.rb'
-require 'plugins/associations.rb'
+require 'strokedb/plugins/plugin.rb'
+require 'strokedb/plugins/callbacks.rb'
+require 'strokedb/plugins/validations.rb'
+require 'strokedb/plugins/associations.rb'
