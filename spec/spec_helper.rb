@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift( File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')) ).uniq!
-require 'strokedb-core'
+require 'strokedb'
 include StrokeDB
 
 SPEC_ROOT = File.expand_path(File.dirname(__FILE__))
