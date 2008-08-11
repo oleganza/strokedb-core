@@ -1,5 +1,5 @@
 require 'strokedb-core'
-include StrokeDB::Core
+include StrokeDB
 
 
 db = Repository.open("documents.db")

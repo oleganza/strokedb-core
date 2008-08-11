@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift( File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')) ).uniq!
 require 'strokedb-core'
-include StrokeDB::Core
+include StrokeDB
 
 SPEC_ROOT = File.expand_path(File.dirname(__FILE__))
 TEMP_DIR = SPEC_ROOT + '/temp'

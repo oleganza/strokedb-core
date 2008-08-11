@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
 require 'strokedb-core'
-include StrokeDB::Core
+include StrokeDB
 
 dir = File.dirname(__FILE__)
 

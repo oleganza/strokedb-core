@@ -16,10 +16,10 @@ module StrokeDB
         end
         
       end
-      klass.send(:include, StrokeDB::Core)
+      klass.send(:include, StrokeDB)
       klass.send(:setup)
       
-      puts "StrokeDB #{::StrokeDB::Core::VERSION} (help! for more info)"
+      puts "StrokeDB #{::StrokeDB::VERSION} (help! for more info)"
     end # self.included
   end # Console
 end # StrokeDB

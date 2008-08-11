@@ -1,16 +1,14 @@
 module StrokeDB
-  module Core
-    module Repositories
-      module MarshalHelper
+  module Repositories
+    module MarshalHelper
 
-        def encode_doc(doc)
-          super(Marshal.dump(doc))
-        end
-      
-        def decode_doc(encoded_doc)
-          Marshal.load(super(encoded_doc))
-        end
+      def encode_doc(doc)
+        super(Marshal.dump(doc))
       end
-    end # Repositories
-  end # Core
+    
+      def decode_doc(encoded_doc)
+        Marshal.load(super(encoded_doc))
+      end
+    end
+  end # Repositories
 end # StrokeDB

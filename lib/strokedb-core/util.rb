@@ -6,10 +6,8 @@ require 'util/require_one_of'
 require 'util/verify'
 
 module StrokeDB
-  module Core
-    include Util
+  include Util
     
-    Util::require_one_of 'json', 'json_pure'
+  Util::require_one_of 'json', 'json_pure'
     
-  end
 end

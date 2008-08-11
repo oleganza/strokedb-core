@@ -1,13 +1,11 @@
 module StrokeDB
-  module Core
-    module Repositories
-      module HashHelper
+  module Repositories
+    module HashHelper
 
-        def new_document
-          { "uuid" => generate_uuid(nil) }
-        end
-
+      def new_document
+        { "uuid" => generate_uuid(nil) }
       end
-    end # Repositories
-  end # Core
+
+    end
+  end # Repositories
 end # StrokeDB
