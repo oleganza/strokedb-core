@@ -5,7 +5,6 @@ describe "HashHelper" do
     @h = ClassFactory.new(Repositories::AbstractHelpers, Repositories::HashHelper).new_class.new
   end
 
-  it { @h.new_document.should == { } }
-  it { @h.new_deleted_document.should == { "deleted" => true } }
+  it { @h.new_document.should == { "uuid" => nil } }
   
 end
