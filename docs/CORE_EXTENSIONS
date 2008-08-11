@@ -1,0 +1,7 @@
+StrokeDB defines some extensions to the core Ruby classes.
+We try to avoid that as much as possible, but in some places
+polymorphism outperforms case/when clause.
+
+util/uuid.rb                     String#to_raw_uuid, String#to_formatted_uuid
+views/default_key_codec.rb       Object#a785274d_dccb_53f1_8262_012d28b070ec
+
