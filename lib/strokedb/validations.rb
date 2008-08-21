@@ -1,6 +1,7 @@
 prefix = "strokedb/validations"
 require "#{prefix}/class_methods"
 require "#{prefix}/instance_methods"
+require "#{prefix}/errors"
 require "#{prefix}/presence"
 
 # TODO: more validations

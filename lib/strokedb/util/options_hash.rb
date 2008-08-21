@@ -1,8 +1,12 @@
 module StrokeDB
   module Util
-    # Usage: OptionsHash(options); options.require("required_option")
+    # Usage: OptionsHash!(options); options.require("required_option")
     # 1. Lets access string and symbol keys interchangebly.
     # 2. Lets specify required keys.
+    def OptionsHash(hash, defaults = nil)
+      OptionsHash!(hash.dup, defaults)
+    end
+    
     def OptionsHash!(hash, defaults = nil)
       unless hash.is_a?(OptionsHash) # not OptionsHash yet
         hash.keys.each {|k| hash[k.to_s] = hash.delete(k) } # stringify keys

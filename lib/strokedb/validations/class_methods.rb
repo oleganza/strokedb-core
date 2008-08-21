@@ -1,9 +1,9 @@
 module StrokeDB
   module Validations
     module ClassMethods
-      def register_validation(name, slot, *args)
+      def register_validation(validation)
         @validations ||= []
-        @validations << [name, slot, *args]
+        @validations << validation
       end
       
       # per-module validations, inheritance chain is not looked up.
