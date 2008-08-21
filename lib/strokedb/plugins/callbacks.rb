@@ -1,16 +1,14 @@
 module StrokeDB
   module Plugins
-    class Callbacks < Plugin
+    module Callbacks
+      include Plugin
       
       module ClassMethods
         attr_accessor :callbacks
         def before_save(*args)
+          @callbacks ||= { }
+          @callbacks[:before_save] ||= []
           @callbacks[:before_save] << args
-        end
-        
-        def strokedb_configured(*args)
-          super
-          @callbacks = [:before_save].inject({}){|c,e| c[e] = []; c }
         end
       end
       

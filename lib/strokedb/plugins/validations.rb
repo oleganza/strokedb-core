@@ -1,17 +1,34 @@
 module StrokeDB
   module Plugins
-    class Validations < Plugin
-
+    module Validations
+      include Plugin
       module ClassMethods
-        attr_accessor :validations
-        def validates_presence_of(*args)
-          @validations << [:presence_of, args]
+        def validates_presence_of(slot, *args)
+          # TODO: check the args
+          register_validation(:presence_of, slot, *args)
         end
         alias validate_presence_of validates_presence_of # nobody likes stupid typos
         
-        def strokedb_configured(*args)
-          super
-          @validations = []
+        def register_validation(name, slot, *args)
+          @validations ||= []
+          @validations << [name, slot, *args]
+        end
+        
+        # per-module validations, inheritance chain is not looked up.
+        def local_validations
+          @validations
+        end
+        
+        # Inherit all the validations
+        def validations
+          ancestors.inject([]) do |validations, mod|
+            validatable?(mod) ? validations + mod.local_validations : validations
+          end
+        end
+        
+      private
+        def validatable?(mod)
+          mod != Validations && mod.ancestors.include?(Validations)
         end
       end
       

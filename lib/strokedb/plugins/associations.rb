@@ -1,16 +1,13 @@
 module StrokeDB
   module Plugins
-    class Associations < Plugin
+    module Associations
+      include Plugin
       
       module ClassMethods
         attr_accessor :associations
         def has_many(*args)
+          @associations ||= []
           @associations << [:has_many, args]
-        end
-        
-        def strokedb_configured(*args)
-          super
-          @associations = []
         end
       end
       

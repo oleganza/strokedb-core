@@ -33,10 +33,10 @@ module StrokeDB
       def initialize(options)
         OptionsHash!(options, DEFAULT_OPTIONS)
         
-        @plugins = options.require("plugins").map {|plugin_class| plugin_class.new(self, options) }
+        @plugins = options.require("plugins").map {|plugin| plugin.configure(self, options); plugin }
         
-        @extend_by_modules = options.require("extend_by_modules") || []
-        @include_modules   = options.require("include_modules")   || []
+        @extend_by_modules = options.require("extend_by_modules")
+        @include_modules   = options.require("include_modules")
         @repository_api    = options.require("repository_api")
         @path              = options.require("path") # FIXME: support networking
         FileUtils.mkdir_p(@path)
