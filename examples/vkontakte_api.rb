@@ -6,7 +6,7 @@ dir = File.dirname(__FILE__)
 
 MyDatabase = StrokeObjects::Database.new(
                 :path    => File.join(dir, ".vkontakte_api.strokedb"),
-                :plugins => [ Plugins::Validations, Plugins::Associations, Plugins::Callbacks ]
+                :plugins => [ Validations, Plugins::Associations, Plugins::Callbacks ]
                 )
 
 module MyValidations

@@ -2,29 +2,20 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
 describe "Validations" do
   
-  class ::Module
-    def setup_validations!
-      include Plugins::Validations
-      
-      #include Plugins::Validations::InstanceMethods
-      #extend Plugins::Validations::ClassMethods
-    end
-  end
-  
   module ContactsValidations
-    setup_validations!
+    include Validations
     validate_presence_of :phone
     validate_presence_of :email
   end
   
   module MoreValidations
-    setup_validations!
+    include Validations
     include ContactsValidations
     validate_presence_of :more
   end
   
   class Person
-    setup_validations!
+    include Validations
     include ContactsValidations
     validate_presence_of :name
   end
