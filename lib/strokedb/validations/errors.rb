@@ -20,17 +20,24 @@ module StrokeDB
       end
       alias push add
       
+      # Iterates over each error
       def each(&blk)
         @errors.each(&blk) 
       end
       
-      # Returns errors 
-      def group_by_slot
+      # Returns errors grouped by slot name.
+      # Validations without slotname are stored under +nil+ key.
+      def by_slot
         @errors.inject({ }) do |hash, error|
           sn = error.slotname
           hash[sn] ||= []
           hash[sn] << error
         end
+      end
+      
+      # Return all error messages
+      def messages
+        @errors.map{|e| e.message }
       end
       
       # Stores validation object and error message.

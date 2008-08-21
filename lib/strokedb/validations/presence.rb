@@ -4,7 +4,7 @@ module StrokeDB
       # Validates that the specified attributes are not blank (as defined by Object#blank?).
       #
       # Configuration options:
-      # * <tt>message</tt> - A custom error message (default is: "can't be blank.")
+      # * <tt>message</tt> - A custom error message (default is: proc{|d,s| "#{s} can't be blank." })
       # * <tt>boolean</tt> - Skips validation if slot is +false+.
       # * <tt>if</tt> - Specifies a method or slot name to call to determine if the validation should
       #   occur (e.g. :if => :allow_validation, or :if => 'signup_step_less_than_three').  The
