@@ -21,59 +21,22 @@ module StrokeDB
       
     end # ClassMethods
     
-    class Presence
+    class Presence < BaseSlotValidation
       DEFAULT_OPTIONS = {
-        :message => proc { |doc, slotname| "#{slotname} can't be blank" },
-        :boolean => false,
-        :if      => true,
-        :unless  => false
+        :message => proc { |doc, slotname, validation| "#{slotname} can't be blank" },
+        :boolean => false      
       }
       
-      attr_accessor :slotname, :message, :if, :unless, :boolean, :options
+      attr_accessor :boolean
       
       def initialize(options)
-        @options = OptionsHash(options.dup, DEFAULT_OPTIONS)
-        @slotname = @options.require(:slotname).to_s
+        super(options, DEFAULT_OPTIONS)
         @boolean  = @options.require(:boolean)
-        m         = @options.require(:message)
-        @message  = m.respond_to?(:call) ? m : (Proc.new{|*a| m })
-        @if       = procify(@options.require(:if))
-        @unless   = procify(@options.require(:unless))
       end
       
-      def validate(doc, errors)
-        slotname = @slotname
-        
-        return nil unless @if.call(doc, slotname)
-        return nil if @unless.call(doc, slotname)
-
-        value = doc[slotname]
-        blank = value.blank?
-        return nil if !blank || value == false && @boolean
-        
-        errors.add(self, @message.call(doc, slotname))
-        errors
-      end
-      
-      #
-      # Serialization
-      #
-      
-      def marshal_dump
-        @options.dup
-      end
-      
-      def marshal_load(options)
-        initialize(options)
-      end
-      
-    private
-      
-      def procify(value)
-        return value if value.respond_to?(:call)
-        return (Proc.new{|*args| value }) if value == true || value == false
-        Proc.new do |doc, slotname|
-          doc.send(value)
+      def validate(doc, errors, value)
+        super(doc, errors) do |slotname, value|
+          !value.blank? || value == false && @boolean
         end
       end
     
