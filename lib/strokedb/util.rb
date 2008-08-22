@@ -5,6 +5,7 @@ require 'strokedb/util/class_factory'
 require 'strokedb/util/require_one_of'
 require 'strokedb/util/verify'
 require 'strokedb/util/pluggable_module'
+require 'strokedb/util/inheritable_attributes'
 
 module StrokeDB
   include Util
