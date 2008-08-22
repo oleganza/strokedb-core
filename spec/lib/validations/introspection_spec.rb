@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
-describe "Validations" do
+describe "Validations[introspection]" do
   
   before :each do
     @contacts_validations = contacts_validations = Module.new do
