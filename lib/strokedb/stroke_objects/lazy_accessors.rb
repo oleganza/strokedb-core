@@ -25,8 +25,9 @@ module StrokeDB
           end
         else
           super
-        end
-      end
-    end
-  end
-end
+        end # if has_slot?
+      end # def method_missing
+      
+    end # LazyAccessors
+  end # StrokeObjects
+end # StrokeDB
