@@ -16,7 +16,6 @@ end
 require 'strokedb/version'
 require 'strokedb/constants'
 require 'strokedb/util'
-require 'strokedb/plugins'
 require 'strokedb/repositories'
 require 'strokedb/views'
 require 'strokedb/validations'
