@@ -1,5 +1,5 @@
 module StrokeDB
-  module Validations
+  module Associations
     module ClassMethods
       #  
       # belongs_to :slotname
