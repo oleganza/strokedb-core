@@ -6,10 +6,10 @@ module StrokeDB
       # This method catches slot access calls (obj.slot, obj.slot=). 
       # Slot accessors are created on the fly.
       Ceq = "="
-      R_0_minus1 = (0..-2)
+      R_0_minus2 = (0..-2)
       def method_missing(meth, value = nil, *args, &blk)
         slotname = meth.to_s
-        is_setter = (slotname[-1,1] == Ceq && slotname = slotname[R_0_minus1])
+        is_setter = (slotname[-1,1] == Ceq && slotname = slotname[R_0_minus2])
         if has_slot?(slotname)
           meta_class = (class <<self;self;end)
           if is_setter
