@@ -12,6 +12,7 @@ describe "Validations" do
       include Validations
       include contacts_validations
       validate_presence_of :more
+      validate_kind_of :something
     end
     @person = Class.new do
       include Validations
@@ -35,6 +36,7 @@ describe "Validations" do
     ]
     @more_validations.validations.map(&map).should == [
       [Validations::Presence, :more],
+      [Validations::Kind,     :something],
       [Validations::Presence, :phone],
       [Validations::Presence, :email]
     ]
@@ -42,6 +44,7 @@ describe "Validations" do
     @person.validations.map(&map).should == [
       [Validations::Presence, :name],
       [Validations::Presence, :more],
+      [Validations::Kind,     :something],
       [Validations::Presence, :phone],
       [Validations::Presence, :email]
     ]

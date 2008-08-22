@@ -4,7 +4,7 @@ module StrokeDB
       def validates_kind_of(slot, options = {})
         # TODO: check the args
         options = {:type => options} unless options.is_a? Hash 
-        register_validation(Presence.new({:slotname => slot}.merge(options)))
+        register_validation(Kind.new({:slotname => slot}.merge(options)))
       end
       alias validate_kind_of validates_kind_of # nobody likes stupid typos
       
@@ -13,7 +13,7 @@ module StrokeDB
     class Kind < BaseSlotValidation
       DEFAULT_OPTIONS = {
         :message => proc {|doc, slotname, validation| 
-          "#{slotname} must be #{validation.type_message}" 
+          "#{slotname} must be kind of #{validation.type_message}" 
         }
       }
       
