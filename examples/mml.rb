@@ -12,7 +12,6 @@ MyDatabase = StrokeObjects::Database.new(
 module MML
   
   module CommonMixins
-    extend PluggableModule
     include StrokeDB::Associations
     include StrokeDB::Validations
   end
