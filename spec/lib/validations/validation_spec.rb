@@ -9,7 +9,7 @@ describe "Validation of" do
       
       include Validations
       validate_presence_of :name
-      validate_kind_of     :age, :type => Integer, :if => :validate_age
+      validate_kind_of     :age, :type => Integer, :if => :validate_age, :allow => nil
       validate_presence_of :gender, :unless => proc{|d,s| d.skip_gender }
             
       def [](slotname)
@@ -81,6 +81,21 @@ describe "Validation of" do
       @person = @person_cls.new
       @person.name         = "Oleg"
       @person.validate_age = false
+      @person.skip_gender  = true
+      @errors = validate(@person)
+    end
+    
+    it "should produce no errors" do
+      @errors.should be_empty
+    end
+  end
+
+  describe "valid object" do
+    before(:each) do
+      @person = @person_cls.new
+      @person.name         = "Oleg"
+      @person.validate_age = true
+      @person.age = nil
       @person.skip_gender  = true
       @errors = validate(@person)
     end
