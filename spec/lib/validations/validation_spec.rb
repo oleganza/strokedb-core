@@ -15,10 +15,6 @@ describe "Validation of" do
       def [](slotname)
         send(slotname)
       end
-      
-      def []=(slotname)
-        send(slotname.to_s + "=")
-      end
     end
   end
 
