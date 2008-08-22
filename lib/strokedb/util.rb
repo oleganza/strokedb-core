@@ -4,6 +4,7 @@ require 'strokedb/util/uuid'
 require 'strokedb/util/class_factory'
 require 'strokedb/util/require_one_of'
 require 'strokedb/util/verify'
+require 'strokedb/util/pluggable_module'
 
 module StrokeDB
   include Util

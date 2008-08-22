@@ -10,13 +10,11 @@ module StrokeDB
     #               Default is "http://localhost/"
     class Database < Module
       # configuration for the rest of us
-      attr_reader :repo, :path
+      attr_reader :repo, :path, :nsurl
       # configuration for the experts
-      attr_reader :extend_by_modules, :include_modules, :repository_api
+      attr_reader :repository_api, :plugins
       
       DEFAULT_OPTIONS = {
-        :extend_by_modules => [ClassMethods],
-        :include_modules   => [InstanceMethods],
         :repository_api    => [
                                 Repositories::AbstractRepository,
                                 Repositories::AbstractHelpers,
@@ -33,10 +31,11 @@ module StrokeDB
       def initialize(options)
         OptionsHash!(options, DEFAULT_OPTIONS)
         
-        @plugins = options.require("plugins").map {|plugin| plugin.configure(self, options); plugin }
+        @plugins = options.require("plugins").map do |plugin| 
+          plugin.configure(self, options) if plugin.respond_to?(:configure)
+          plugin
+        end
         
-        @extend_by_modules = options.require("extend_by_modules")
-        @include_modules   = options.require("include_modules")
         @repository_api    = options.require("repository_api")
         @path              = options.require("path") # FIXME: support networking
         FileUtils.mkdir_p(@path)
@@ -46,7 +45,7 @@ module StrokeDB
             
         DEBUG do
           puts "#{self.class.inspect} configuration:"
-          [:@extend_by_modules, :@include_modules, :@repository_api].each do |ivar|
+          [:@repository_api, :@plugins].each do |ivar|
             puts "  #{(ivar.to_s+':').ljust(20)} #{instance_variable_get(ivar).inspect}"
           end
         end
@@ -62,8 +61,15 @@ module StrokeDB
       private :new_repo
       
       def included(base)
-        @extend_by_modules.each{|cm| base.extend(cm)         }
-        @include_modules.each{|im|   base.send(:include, im) }
+        # First, extend and include core methods
+        base.extend(ClassMethods)
+        base.send(:include, InstanceMethods)
+        
+        # Then, include plugins (plugin can extend class with its own 
+        # class methods in the Module#included hook)
+        @plugins.each{|pl|   base.send(:include, pl) }
+        
+        # Call the callback when all modules are included.
         base.strokedb_configured(self)
       end
       
