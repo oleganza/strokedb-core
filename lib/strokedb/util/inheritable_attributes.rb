@@ -44,7 +44,7 @@ module StrokeDB
     
     def included(sub)
       sub.extend(StrokeDB::InheritableAttributes)
-      @names_78f4156b_f3cb_55e8_9083_680ed199f277.each do |name|
+      (@names_78f4156b_f3cb_55e8_9083_680ed199f277 || []).each do |name|
         sub.define_inheritable_attribute(name)
       end
       super

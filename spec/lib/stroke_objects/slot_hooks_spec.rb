@@ -7,11 +7,10 @@ describe StrokeObjects::SlotHooks do
       include StrokeObjects::SlotHooks
     end
     
-    
-    
-    @doc = @cls.new
+    @doc = @cls_with_hooks.new
   end
   
   it "should raise when unknown slot is accessed" do
     
   end
+end
