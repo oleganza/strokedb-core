@@ -10,7 +10,7 @@ module StrokeDB
     end # ClassMethods
     
     class BelongsTo
-      attr_accessor :slotname, :boolean
+      attr_accessor :slotname
       
       def initialize(options)
         @options = OptionsHash(options)

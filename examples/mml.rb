@@ -20,7 +20,7 @@ module MML
     include CommonMixins
     
     belongs_to :owner
-    has_many :account_memberships, :slot => :account
+    has_many :account_memberships, :as => :account
     has_many :members, :through => :account_memberships
     has_many :projects
     
@@ -39,11 +39,11 @@ module MML
   
   module Person
     include CommonMixins
-    has_many :owned_accounts, :slot => :owner
+    has_many :owned_accounts, :as => :owner
     
-    has_many :account_memberships, :slot => :person
+    has_many :account_memberships, :as => :person
     has_many :accounts, :through => :account_memberships
-    has_many :project_memberships, :slot => :person
+    has_many :project_memberships, :as => :person
     has_many :projects, :through => :project_memberships
   end
 
@@ -61,9 +61,9 @@ module MML
     include CommonMixins
     
     belongs_to :account
-    has_many :project_memberships, :slot => :project
+    has_many :project_memberships, :as => :project
     has_many :members, :through => :project_memberships
-    has_many :files, :slot => :folder
+    has_many :files, :as => :folder
     
     validates_kind_of :account, Account
   end
@@ -94,7 +94,7 @@ oleg = verify { Person.create(:name => "Oleg Andreev", :email => "oleganza@gmail
 oleg_account = verify { Account.create(:name => "Oleg Andreev's account", :owner => oleg) }
 oleg_personal_account = verify { oleg.owned_accounts.create(:name => "Oleg Andreev's personal account") }
 
-
+verify { oleg.accounts.size == 2 }
 
 
 

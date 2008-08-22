@@ -1,3 +1,5 @@
+require 'strokedb/stroke_objects/lazy_accessors.rb'
+require 'strokedb/stroke_objects/slot_hooks.rb'
 require 'strokedb/stroke_objects/instance_methods.rb'
 require 'strokedb/stroke_objects/class_methods.rb'
 require 'strokedb/stroke_objects/database.rb'
