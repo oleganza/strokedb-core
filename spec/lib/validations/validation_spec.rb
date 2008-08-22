@@ -29,6 +29,26 @@ describe "Validation of" do
     end    
   end
 
+  describe "invalid object" do
+    before(:each) do
+      @person = @person_cls.new
+      @person.name         = "Oleg"
+      @person.validate_age = true
+      @person.skip_gender  = false
+      @person.age          = "22"
+      @errors = validate(@person)
+    end
+    
+    it "should produce some errors" do
+      @errors.map{|e| 
+        [e.validation.class, e.validation.slotname.to_sym] 
+      }.should == [
+        [Validations::Kind,     :age], 
+        [Validations::Presence, :gender]
+      ]
+    end
+  end
+  
   describe "valid object" do
     before(:each) do
       @person = @person_cls.new
