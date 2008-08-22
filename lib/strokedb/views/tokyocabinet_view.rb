@@ -12,15 +12,14 @@ module StrokeDB
         OptionsHash!(options)
         @tc_path = options.require("path")
         @tc_bdb = BDB::new
-        mode = HDB::OWRITER | HDB::OCREAT
-        @tc_bdb.open(@tc_path, mode) or tc_raise("open", @tc_path, mode)
+        @tc_bdb.open(:path => @tc_path, :writer => true, :create => true)
         @tc_bdbcur = BDBCUR::new(@tc_bdb)
         nil
       end
       
       # Safely closes the view (closes file/connection or frees some resources).
       def close
-        @tc_bdb.close or tc_raise("close")
+        @tc_bdb.close
         @tc_bdbcur = nil
       end
       
@@ -133,22 +132,14 @@ module StrokeDB
       
       # Vanishes the storage
       def vanish
-        @tc_bdb.vanish or tc_raise("vanish")
+        @tc_bdb.vanish
       end
       
       # Syncs repository updates with the I/O device
       def iosync
-        @tc_bdb.sync or tc_raise("sync")
+        @tc_bdb.sync
       end
-      
-    private
-    
-      def tc_raise(meth, *args)
-        ecode = @tc_bdb.ecode
-        argsi = args.map{|a|a.inspect}.join(', ')
-        raise(StorageError, "TokyoCabinet::BDB##{meth}(#{argsi}) error: %s\n" % @tc_bdb.errmsg(ecode))
-      end
-      
-    end
-  end
-end
+            
+    end # TokyoCabinetView
+  end # Views
+end # StrokeDB
