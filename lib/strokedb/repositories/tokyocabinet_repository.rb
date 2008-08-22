@@ -25,12 +25,10 @@ module StrokeDB
         @tc_storage = HDB::new
         @tc_heads   = HDB::new
         @tc_log     = BDB::new
-        mode    = HDB::OWRITER | HDB::OCREAT
-        bdbmode = BDB::OWRITER | BDB::OCREAT 
-        @tc_storage.open(@tc_storage_path, mode) or tc_raise("open", @tc_storage_path, mode)
-        @tc_heads.open(@tc_heads_path, mode)     or tc_heads_raise("open", @tc_heads_path, mode)
+        @tc_storage.open(:path => @tc_storage_path, :writer => true, :create => true)
+        @tc_heads.open(:path => @tc_heads_path, :writer => true, :create => true)
         # FIXME: i don't really  think we need this log file right now.
-        @tc_log.open(@tc_log_path, bdbmode)      or tc_log_raise("open", @tc_log_path, bdbmode)
+        @tc_log.open(:path => @tc_log_path, :writer => true, :create => true)
         # REFACTOR THIS
         # TODO: save repo uuid into the versions storage at the very top and ignore in the iterator.
         # brand new repository -> generate UUID for it
@@ -38,16 +36,16 @@ module StrokeDB
           @uuid = generate_uuid(nil)
           @tc_log.put(REPO_UUID_TOKEN, @uuid)
         else
-          @uuid = @tc_log.get(REPO_UUID_TOKEN) or tc_log_raise("get", REPO_UUID_TOKEN)
+          @uuid = @tc_log.get(REPO_UUID_TOKEN)
         end
         nil
       end
     
       # Closes repository
       def close
-        @tc_storage.close or tc_raise("close")
-        @tc_heads.close or tc_heads_raise("close")
-        @tc_log.close or tc_log_raise("close")
+        @tc_storage.close
+        @tc_heads.close
+        @tc_log.close
         nil
       end
 
@@ -134,24 +132,24 @@ module StrokeDB
       # Stores doc in a repository. Returns nil.
       def store(version, uuid, doc, repo_uuid = @uuid)
         encoded_doc = encode_doc(doc)
-        @tc_storage.put(version, encoded_doc) or tc_raise("put", version, encoded_doc)
-        @tc_heads.put(uuid + repo_uuid, version) or tc_heads_raise("put", uuid, version)
+        @tc_storage.put(version, encoded_doc)
+        @tc_heads.put(uuid + repo_uuid, version)
         nil
       end
       
       # Vanishes the storage
       def vanish
-        @tc_storage.vanish or tc_raise("vanish")
-        @tc_heads.vanish or tc_heads_raise("vanish")
-        @tc_log.vanish or tc_log_raise("vanish")
+        @tc_storage.vanish
+        @tc_heads.vanish
+        @tc_log.vanish
         nil
       end
       
       # Syncs repository updates with the device
       def iosync
-        @tc_storage.sync or tc_raise("sync")
-        @tc_log.sync or tc_log_raise("sync")
-        @tc_heads.sync or tc_heads_raise("sync")
+        @tc_storage.sync
+        @tc_log.sync
+        @tc_heads.sync
         nil
       end
       
@@ -162,7 +160,7 @@ module StrokeDB
       
       # Returns number of UUIDs stored in a repository
       def heads_count
-        @tc_heads.size or tc_heads_raise("uuids_count")
+        @tc_heads.size
       end
 
       def each_head(&blk)
@@ -192,25 +190,7 @@ module StrokeDB
       # oleganza: 
       # Private methods are prefixed to avoid clashing with other modules' private helpers.
       # Now I understand why private members in C++ are not shared in the inheritance chain.
-      
-      def tc_raise(meth, *args)
-        ecode = @tc_storage.ecode
-        argsi = args.map{|a|a.inspect}.join(', ')
-        raise(StorageError, "TokyoCabinet::HDB##{meth}(#{argsi}) error: %s\n" % @tc_storage.errmsg(ecode))
-      end
-      
-      def tc_heads_raise(meth, *args)
-        ecode = @tc_heads.ecode
-        argsi = args.map{|a|a.inspect}.join(', ')
-        raise(StorageError, "TokyoCabinet::HDB(uuids index)##{meth}(#{argsi}) error: %s\n" % @tc_heads.errmsg(ecode))
-      end
-      
-      def tc_log_raise(meth, *args)
-        ecode = @tc_log.ecode
-        argsi = args.map{|a|a.inspect}.join(', ')
-        raise(StorageError, "TokyoCabinet::BDB(log)##{meth}(#{argsi}) error: %s\n" % @tc_log.errmsg(ecode))
-      end
-      
+            
       def tc_previous_versions(version)
         # TODO: make an index for this stuff
         v = get_version(version)["previous_version"]

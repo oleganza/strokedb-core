@@ -6,7 +6,12 @@ require 'fileutils'
 begin
   require 'extlib' 
 rescue LoadError => e
-  raise e, "Extlib is missing. See git://github.com/sam/extlib.git"
+  raise e, "Extlib is missing. See http://github.com/sam/extlib/"
+end
+begin
+  require 'tokyocabinet-wrapper' 
+rescue LoadError => e
+  raise e, "Tokyocabinet wrapper is missing. See http://github.com/oleganza/tokyocabinet-wrapper/"
 end
 require 'strokedb/version'
 require 'strokedb/constants'
