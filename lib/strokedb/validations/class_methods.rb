@@ -17,7 +17,7 @@ module StrokeDB
           validatable?(mod) ? validations + mod.local_validations : validations
         end
       end
-      
+            
     private
       def validatable?(mod)
         mod != Validations && mod.ancestors.include?(Validations)

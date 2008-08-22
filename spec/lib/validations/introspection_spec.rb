@@ -19,12 +19,16 @@ describe "Validations" do
       include contacts_validations
       validate_presence_of :name
     end
+    @girlfriend = Class.new(@person) do
+      validate_presence_of :boyfriend # :-)
+    end
+    @map = Proc.new do |v|
+      [v.class, v.slotname.to_sym]
+    end
   end
   
   it "should be inheritable when defined in a module" do
-    map = Proc.new do |v|
-      [v.class, v.slotname.to_sym]
-    end
+    map = @map
     @contacts_validations.validations.map(&map).should == [
       [Validations::Presence, :phone],
       [Validations::Presence, :email]
@@ -50,7 +54,23 @@ describe "Validations" do
     ]
   end
 
-  it "should be inheritable when defined in base class"  
-  it "should implement basic validations"
+  it "should be inheritable when defined in a class"  do
+    map = @map
+    @girlfriend.validations.map(&map).should == [
+      [Validations::Presence, :boyfriend],
+      [Validations::Presence, :name],
+      [Validations::Presence, :phone],
+      [Validations::Presence, :email]
+    ]
+    @person.send(:include, @more_validations)
+    @girlfriend.validations.map(&map).should == [
+      [Validations::Presence, :boyfriend],
+      [Validations::Presence, :name],
+      [Validations::Presence, :more],
+      [Validations::Kind,     :something],
+      [Validations::Presence, :phone],
+      [Validations::Presence, :email]
+    ]
+  end
   
 end  
