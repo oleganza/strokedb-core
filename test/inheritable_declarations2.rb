@@ -1,104 +1,85 @@
 #!/usr/bin/env ruby
 
-module Declarations
-  
-  # When set up a new child, notify all the ancestors
-  # When add declaration to a parent, update all known children
-  module SelfMethods
-    def setup(container, plugins)
-      container.extend(ClassMethods)
-      container.decls_setup(plugins)
-    end
+module InheritableAttributes
+  def include(mod)
+    invalidate_children_78f4156b_f3cb_55e8_9083_680ed199f277
+    super
   end
-  
-  extend SelfMethods
-  
-  # This class is used instead of simple proc{|*args, &blk| }
-  # because Ruby 1.8.6 doesn't like &blk in a block arguments list.
-  class MacroDefiner
-    def initialize(container, macro)
-      @container = container
-      @macro = macro
-    end
-    def define_macro(*args, &blk)
-      @container.add_declaration(@macro, args, blk)
-    end
+  def extend(mod)
+    invalidate_children_78f4156b_f3cb_55e8_9083_680ed199f277
+    super
   end
-  
-  module ClassMethods
-    attr_accessor :declarations, 
-                  :decls_children,
-                  :decls_plugins
-    
-    # Updates self and children decls
-    def add_declaration(macro, args, blk)
-      # note: children contain self already
-      @declarations_children.each do |child|
-        (child.declarations ||= []) << [macro, args, blk]
+  def included(mod)
+    invalidate_children_78f4156b_f3cb_55e8_9083_680ed199f277(mod)
+    super
+  end
+  def extended(mod)
+    invalidate_children_78f4156b_f3cb_55e8_9083_680ed199f277(mod)
+    super
+  end
+  IAUUID = "78f4156b_f3cb_55e8_9083_680ed199f277"
+  def invalidate_children_78f4156b_f3cb_55e8_9083_680ed199f277(mod = self)
+    mod.instance_variables.grep(/children_#{IAUUID}$/) do |ivar|
+      (mod.instance_variable_get(ivar) || []).each do |child|
+        child.instance_variable_set("#{ivar}_cache", nil)
       end
     end
-    
-    # 1. Adds local declarations to a child
-    # 2. Remembers a child in a children list
-    def declare_child(child)
-      return if @declarations_children && @declarations_children.include?(child)
-      child.declarations ||= []
-      child.declarations += (declarations || [])
-      (@declarations_children ||= []) << child
-    end
-    
-    def inherited(subclass)
-      
-    end
-    
-    def included(submodule)
-      # do nothing if submodule is already declarifized (see #include)
-      return if ClassMethods === submodule
-      
-    end
-    
-    # Overriden Module#include to catch lazily added decls.
-    def include(mod)
-      super
-      self.inherit_decls(mod)
-    end
-    
-    # When we mix in new module or class into hierarchy:
-    # 1. This module must inherit all decls in the ancestors
-    # 2. Update all the children with its own declarations
-    #
-    # What to inherit:
-    # 1. Declarations.
-    # 2. Configuration
-    #
-    def inherit_decls(mod)
-      if mod == ClassMethods
-        
-      end
-    end
-    
-  end # ClassMethods
-  
-  module InstanceMethods
-    def extend(mod)
-      super
-      class <<self; self; end.inherit_decls(mod)
-    end
   end
-end # Declarations
+  
+  def define_inheritable_attribute(name)
+    
+    ivar_cache         = "@#{name}_children_#{IAUUID}_cache"
+    ivar_children      = "@#{name}_children_#{IAUUID}"
+    ivar_children_get  = "instance_variable_get(:#{ivar_children})"
+    ivar_children_set_ = "instance_variable_set(:#{ivar_children}"
+    
+    meta_class = (class <<self; self; end)
+    meta_class.module_eval(code = <<-EVAL, __FILE__, __LINE__)
+      def #{name}
+        @#{name}
+      end
+      def #{name}=(v)
+        @#{name} = v
+        # Invalidate all inherited ivars instead of the needed one. 
+        # The code is already messy, so i don't even try to be THAT smartass.
+        invalidate_children_78f4156b_f3cb_55e8_9083_680ed199f277
+        v
+      end
+      def all_#{name}
+        #{ivar_cache} ||= ancestors.inject([]) do |memo, ancestor|
+          c = ancestor.#{ivar_children_get}
+          ancestor.#{ivar_children_set_}, ((c || []) << self).uniq)
+          memo.push(ancestor.#{name}) if ancestor.respond_to?(:#{name})
+          memo
+        end
+      end
+    EVAL
+  end
+end
 
 
 # Test
+
+module Generator
+  def method_missing(meth, *args)
+    define_inheritable_attribute(:declarations)
+    self.declarations ||= []
+    self.declarations << [meth, args]
+  end
+end
+
+InheritableAttributes.send(:include, Generator)
+
 
 module SomeSimpleModule
 end
 
 module SomeLazyModule
-  Declarations.setup(self)
+  extend InheritableAttributes
 end
 
 module SomeModule
-  Declarations.setup(self)
+  extend InheritableAttributes
   include SomeLazyModule
     
   validates_presence_of :a, :b 
@@ -111,7 +92,7 @@ class BaseBaseClass
 end
 
 class BaseClass < BaseBaseClass
-  Declarations.setup(self)
+  extend InheritableAttributes
   
   validates_presence_of :c, :d
   before_save :c, :d
@@ -120,6 +101,7 @@ class BaseClass < BaseBaseClass
 end
 
 class MyClass < BaseClass
+  extend InheritableAttributes
   include SomeModule
   include SomeSimpleModule
   validates_confirmation_of :x, :z
@@ -130,15 +112,26 @@ module SomeLazyModule
 end
 
 module SomeVeryLazyModule
-  Declarations.setup(self)
+  extend InheritableAttributes
   has_many :much, :more, :lazyness
+  def xxxx
+    :xxxx
+  end
 end
 
 module SomeLazyModule
   include SomeVeryLazyModule
 end
 
-puts MyClass.declarations.map{|line| line.inspect}
+puts MyClass.all_declarations.map{|line| line.inspect}
+
+class BaseBaseClass
+  include SomeVeryLazyModule
+end
+
+p MyClass.ancestors
+
+puts MyClass.all_declarations.map{|line| line.inspect}
 
 
 
