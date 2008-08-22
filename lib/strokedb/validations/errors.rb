@@ -35,6 +35,10 @@ module StrokeDB
         end
       end
       
+      def empty?
+        @errors.empty?
+      end
+      
       # Return all error messages
       def messages
         @errors.map{|e| e.message }

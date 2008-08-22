@@ -34,7 +34,7 @@ module StrokeDB
         @boolean  = @options.require(:boolean)
       end
       
-      def validate(doc, errors, value)
+      def validate(doc, errors)
         super(doc, errors) do |slotname, value|
           !value.blank? || value == false && @boolean
         end
