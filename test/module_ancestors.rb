@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
 
 class Module
-  def all_ancestors(collected = [])
+  # Default implementation doesn't collect all possible ancestors.
+  alias not_all_ancestors ancestors
+  def ancestors(collected = [])
     collected << self
-    (ancestors - collected).inject(collected) do |c, a|
-      (c | a.all_ancestors(c))
+    (not_all_ancestors - collected).inject(collected) do |c, a|
+      (c | a.ancestors(c))
     end
   end
 end
@@ -30,8 +32,8 @@ end
 
 # Where's module A1?
 
-p([A1, A2, B1, B2].map{|m| m.all_ancestors == m.ancestors })
+p([A1, A2, B1, B2].map{|m| m.not_all_ancestors == m.ancestors })
 
-puts(C.all_ancestors - C.ancestors == [ A1 ])
-puts(C.all_ancestors == [C, B2, A2, B1, A1, Object, Kernel])
-puts(C.ancestors == [C, B2, A2, B1, Object, Kernel])
+puts(C.ancestors - C.not_all_ancestors == [ A1 ])
+puts(C.ancestors == [C, B2, A2, B1, A1, Object, Kernel])
+puts(C.not_all_ancestors == [C, B2, A2, B1, Object, Kernel])
