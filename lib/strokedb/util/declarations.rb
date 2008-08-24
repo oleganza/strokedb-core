@@ -64,6 +64,12 @@ module StrokeDB
     module ModuleMethods
       # Search ancestors for the missing method
       def method_missing(meth, *args, &blk)
+        # 0. If this is a DSL and Declarations were included lazily,
+        #    module may not have these methods. Extend it with them
+        if Declarations::API.instance_methods.include?(meth.to_s) and !is_a?(Declarations::API)
+          extend(Declarations::API)
+          return send(meth, *args, &blk)
+        end
         # 1. Find nearest module with all
         mod_with_dsl = absolutely_all_ancestors.detect {|a| a.respond_to?(meth) }
         super unless mod_with_dsl

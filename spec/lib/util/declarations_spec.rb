@@ -232,7 +232,6 @@ describe Declarations, "lazy DSL definition" do
   end
   
   it "should work" do
-    pending "not yet implemented"
     @base_mod.after_save_callbacks.should == []
     @sub_mod.after_save_callbacks.should == []
     @base_mod.after_save :base
