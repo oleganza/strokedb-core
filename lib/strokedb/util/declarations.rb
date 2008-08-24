@@ -37,30 +37,9 @@ module StrokeDB
       #    provide declarations 
       # 2. Install other hooks for proper cache invalidation.
       #    Cache contains a list of inherited data.
-      dsl_module.extend(ExtendHooks)
       dsl_module.send(:include, API)
     end
-    
-    module ExtendHooks
-      # When DSL extends some module, this module extends 
-      # every module it is included in with this DSL.
-      def extended(mod)
-        dsl = self
-        # We create a new module to implement proper chaining of all #included calls.
-        mod_extender = Module.new
-        mod_extender.send(:define_method, :included) do |submod|
-          super
-          submod.extend(dsl)
-        end
-        mod.extend(mod_extender)
-        mod.instance_eval do
-          @decl_dsls ||= []
-          @decl_dsls << dsl
-        end
-        nil
-      end
-    end
-    
+        
     module ModuleMethods
       # Search ancestors for the missing method
       def method_missing(meth, *args, &blk)
@@ -76,7 +55,6 @@ module StrokeDB
         super unless mod_with_dsl
         # 2. extended self with all the DSLs found in this module
         all_were_extended = true
-        ###mod_with_dsl.instance_eval{ @decl_dsls || [] }.each do |dsl|
         amc = (class<<mod_with_dsl;self;end)
         amc.absolutely_all_ancestors.each do |dsl|
           unless dsl.is_a?(Class)
