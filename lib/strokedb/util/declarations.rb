@@ -83,9 +83,10 @@ module StrokeDB
       #    #==>"CA1AF719_3EC3_56BB_A98A_C67AD40A5266"
       CA1AF719_3EC3_56BB_A98A_C67AD40A5266 = Object.new.freeze
     
-      def local_declarations(name, default = CA1AF719_3EC3_56BB_A98A_C67AD40A5266)
+      def local_declarations(name, default = CA1AF719_3EC3_56BB_A98A_C67AD40A5266, &blk)
         decls = (@local_declarations ||= Hash.new(CA1AF719_3EC3_56BB_A98A_C67AD40A5266))
         decls[name] = default if decls[name].equal?(CA1AF719_3EC3_56BB_A98A_C67AD40A5266)
+        return local_declarations_set(name, yield(decls[name])) if block_given?
         decls[name]
       end
     

@@ -6,10 +6,11 @@ describe Declarations do
     # Sample DSL
     abstract_callbacks = Module.new do
       def abstract_callback(name, *methods, &blk)
-        list = local_declarations(name, [])
-        list = methods.reverse + list # insert in reversed order for ancestors' order complience.
-        list.unshift(blk) if blk
-        local_declarations_set(name, list)
+        local_declarations(name, []) do |list|
+          list = methods.reverse + list # insert in reversed order for ancestors' order complience.
+          list.unshift(blk) if blk
+          list
+        end
       end
       def abstract_callback_list(name)
         inherited_declarations(name) do |inherited_data|
