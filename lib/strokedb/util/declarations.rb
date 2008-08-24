@@ -70,14 +70,19 @@ module StrokeDB
           extend(Declarations::API)
           return send(meth, *args, &blk)
         end
+        
         # 1. Find nearest module with all
         mod_with_dsl = absolutely_all_ancestors.detect {|a| a.respond_to?(meth) }
         super unless mod_with_dsl
         # 2. extended self with all the DSLs found in this module
         all_were_extended = true
-        mod_with_dsl.instance_eval{ @decl_dsls || [] }.each do |dsl|
-          all_were_extended &&= self.is_a?(dsl)
-          extend(dsl)
+        ###mod_with_dsl.instance_eval{ @decl_dsls || [] }.each do |dsl|
+        amc = (class<<mod_with_dsl;self;end)
+        amc.absolutely_all_ancestors.each do |dsl|
+          unless dsl.is_a?(Class)
+            all_were_extended &&= self.is_a?(dsl)
+            extend(dsl) unless self.is_a?(dsl)
+          end
         end
         # 3. try again if no circular dependency detected
         unless all_were_extended

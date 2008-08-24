@@ -208,7 +208,7 @@ describe Declarations, "lazy DSL definition" do
         list = local_declarations(:after_save, [])
         list = methods.reverse + list # insert in reversed order for ancestors' order complience.
         list.unshift(blk) if blk
-        local_declarations_set(name, list)
+        local_declarations_set(:after_save, list)
       end
       def after_save_callbacks
         inherited_declarations(:after_save) do |inherited_data|
@@ -218,7 +218,7 @@ describe Declarations, "lazy DSL definition" do
         end
       end
     end
-    
+        
     after_save_mod = @after_save
     @base_mod = Module.new do
       extend after_save_mod
@@ -233,7 +233,6 @@ describe Declarations, "lazy DSL definition" do
   
   it "should work" do
     @base_mod.after_save_callbacks.should == []
-    pending "children lazy dslfication is not yet implemented"
     @sub_mod.after_save_callbacks.should == []
     @base_mod.after_save :base
     @base_mod.after_save_callbacks.should == [:base]
