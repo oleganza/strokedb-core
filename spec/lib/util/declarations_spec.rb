@@ -198,3 +198,49 @@ describe Declarations do
   end
     
 end
+
+
+describe Declarations, "lazy DSL definition" do
+  before(:each) do
+    # define methods without Declarations inclusion.
+    @after_save = Module.new do
+      def after_save(*methods, &blk)
+        list = local_declarations(:after_save, [])
+        list = methods.reverse + list # insert in reversed order for ancestors' order complience.
+        list.unshift(blk) if blk
+        local_declarations_set(name, list)
+      end
+      def after_save_callbacks
+        inherited_declarations(:after_save) do |inherited_data|
+          inherited_data.inject([]) do |stack, callbacks|
+            stack + callbacks
+          end
+        end
+      end
+    end
+    
+    after_save_mod = @after_save
+    @base_mod = Module.new do
+      extend after_save_mod
+    end
+    
+    @sub_mod = Module.new
+    @sub_mod.send :include, @base_mod
+    
+    # And now, finally extend our DSL with StrokeDB::Declarations
+    @after_save.send(:include, StrokeDB::Declarations)
+  end
+  
+  it "should work" do
+    pending "not yet implemented"
+    @base_mod.after_save_callbacks.should == []
+    @sub_mod.after_save_callbacks.should == []
+    @base_mod.after_save :base
+    @base_mod.after_save_callbacks.should == [:base]
+    @sub_mod.after_save_callbacks.should == [:base]
+    @sub_mod.after_save :sub
+    @base_mod.after_save_callbacks.should == [:base]
+    @sub_mod.after_save_callbacks.should == [:sub, :base]
+  end
+end
+
