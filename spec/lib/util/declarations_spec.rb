@@ -233,6 +233,7 @@ describe Declarations, "lazy DSL definition" do
   
   it "should work" do
     @base_mod.after_save_callbacks.should == []
+    pending "children lazy dslfication is not yet implemented"
     @sub_mod.after_save_callbacks.should == []
     @base_mod.after_save :base
     @base_mod.after_save_callbacks.should == [:base]
