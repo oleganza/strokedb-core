@@ -4,7 +4,10 @@ describe StrokeObjects::SlotHooks do
   
   before :each do
     @cls_with_hooks = Class.new(Hash) do
-      include StrokeObjects::SlotHooks
+      extend StrokeObjects::SlotHooks
+      slot_hook :name do
+        
+      end
     end
     
     @doc = @cls_with_hooks.new
