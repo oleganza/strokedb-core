@@ -24,7 +24,10 @@ networking:
   async/sync rpc api:
     for repositories
     for views
-OO API
+StrokeObjects (collection of OO APIs):
+  refactor these to use declarations framework:
+    validations
+    associations
   classes (like ActiveRecord)
   metas
   autoload (lazy_mapping_array and such stuff)
@@ -41,7 +44,6 @@ validations:
   networking:
     transferrable validations (don't repeat presence_of on server if client already checked, but check uniqueness_of)
 admin tasks:
-  console
   rcov
   rdoc
   
