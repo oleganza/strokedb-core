@@ -2,6 +2,8 @@ module StrokeDB
   module StrokeObjects
     module SlotHooks
       include StrokeDB::Declarations
+      # Sets inheritable get/set hooks on a slot.
+      #
       # Example:
       #
       # class Person < Hash
@@ -20,13 +22,30 @@ module StrokeDB
       # end
       #
       def slot_hook(slotname, mod = nil, &blk)
-        
-        #slot_hooks[slotname] ||= SlotHook.new
-        #slot_hooks[slotname].extend(mod || Module.new(&blk))
+        local_declarations(:slot_hooks, Hash.new) do |hooks|
+          hooks[slotname] ||= []
+          hooks[slotname] << (mod || Module.new(&blk))
+          hooks
+        end
       end
       
-      def slot_hooks
-        
+      def slot_hooks(hook_class = DefaultSlotHook)
+        inherited_declarations(:slot_hooks) do |inherited_data|
+          # Build hooks for all slots with inheritance in mind.
+          inherited_data.inject(Hash.new) do |all_hooks, local_hooks|
+            local_hooks.inject(all_hooks) do |hooks, (slotname, modules)|
+              hook = (hooks[slotname] ||= hook_class.new)
+              modules.each {|m| hook.extend(m) }
+              hooks
+            end
+          end
+        end
+      end
+      
+      # Include ObjectLayer where extended.
+      def self.extended(mod)
+        super
+        mod.send(:include, ObjectLayer)
       end
       
       module ObjectLayer
@@ -41,20 +60,21 @@ module StrokeDB
       
         def []=(slotname, value)
           return super unless hook = slot_hooks[slotname]
-          return hook.set(self, slotname, value) { super }
+          return hook.set(self, slotname, value) { |k,v| super(k,v) }
         end
       end # ObjectLayer
       
       # Default slot hook: no op.
-      class SlotHook        
+      class DefaultSlotHook        
         def get(doc, slotname)
           yield # returns super
         end
         
         def set(doc, slotname, value)
-          yield # returns super
+          yield(slotname, value) # returns super
         end
-      end
-    end
+      end # DefaultSlotHook
+      
+    end # SlotHooks
   end # StrokeObjects
 end # StrokeDB
