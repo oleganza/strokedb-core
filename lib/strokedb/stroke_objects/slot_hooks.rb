@@ -20,6 +20,9 @@ module StrokeDB
       end
       
       module ClassMethods
+        def self.extend(mod)
+          mod.extend(InheritableAttributes)
+        end
         attr_accessor :slot_hooks
         def slot_hooks
           @slot_hooks ||= {}
