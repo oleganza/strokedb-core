@@ -33,6 +33,9 @@ StrokeObjects (collection of OO APIs):
   metas
     detection from constants
   autoload (lazy_mapping_array and such stuff)
+    refactor LMA, LMH: use inheritance instead of alias() and procs:
+      LMA
+      LMH
   nsurl
 associations:
   identity map in a repository (versions' equality must imply object_id's equality)
