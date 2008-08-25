@@ -46,63 +46,66 @@ describe "Validation of" do
   end
   
   describe "valid object" do
-    before(:each) do
-      @person = @person_cls.new
-      @person.name         = "Oleg"
-      @person.validate_age = true
-      @person.skip_gender  = false
-      @person.age          = 22
-      @person.gender       = "male"
-      @errors = validate(@person)
+    
+    describe "with all attributes" do
+      before(:each) do
+        @person = @person_cls.new
+        @person.name         = "Oleg"
+        @person.validate_age = true
+        @person.skip_gender  = false
+        @person.age          = 22
+        @person.gender       = "male"
+        @errors = validate(@person)
+      end
+    
+      it "should produce no errors" do
+        @errors.should be_empty
+      end
     end
     
-    it "should produce no errors" do
-      @errors.should be_empty
+    describe "with skipped kind_of validation" do
+      before(:each) do
+        @person = @person_cls.new
+        @person.name         = "Oleg"
+        @person.validate_age = false
+        @person.skip_gender  = false
+        @person.gender       = "male"
+        @errors = validate(@person)
+      end
+    
+      it "should produce no errors" do
+        @errors.should be_empty
+      end
     end
-  end
+    
+    describe "with skipped presence_of and kind_of validations" do
+      before(:each) do
+        @person = @person_cls.new
+        @person.name         = "Oleg"
+        @person.validate_age = false
+        @person.skip_gender  = true
+        @errors = validate(@person)
+      end
+    
+      it "should produce no errors" do
+        @errors.should be_empty
+      end
+    end
 
-  describe "valid object" do
-    before(:each) do
-      @person = @person_cls.new
-      @person.name         = "Oleg"
-      @person.validate_age = false
-      @person.skip_gender  = false
-      @person.gender       = "male"
-      @errors = validate(@person)
-    end
+    describe "with nil instead of numeric value" do
+      before(:each) do
+        @person = @person_cls.new
+        @person.name         = "Oleg"
+        @person.validate_age = true
+        @person.age = nil
+        @person.skip_gender  = true
+        @errors = validate(@person)
+      end
     
-    it "should produce no errors" do
-      @errors.should be_empty
-    end
-  end
-  
-  describe "valid object" do
-    before(:each) do
-      @person = @person_cls.new
-      @person.name         = "Oleg"
-      @person.validate_age = false
-      @person.skip_gender  = true
-      @errors = validate(@person)
-    end
+      it "should produce no errors" do
+        @errors.should be_empty
+      end
+    end 
     
-    it "should produce no errors" do
-      @errors.should be_empty
-    end
-  end
-
-  describe "valid object" do
-    before(:each) do
-      @person = @person_cls.new
-      @person.name         = "Oleg"
-      @person.validate_age = true
-      @person.age = nil
-      @person.skip_gender  = true
-      @errors = validate(@person)
-    end
-    
-    it "should produce no errors" do
-      @errors.should be_empty
-    end
-  end
-  
+  end # describe "valid object"
 end
