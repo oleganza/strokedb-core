@@ -26,7 +26,6 @@ networking:
     for views
 StrokeObjects (collection of OO APIs):
   refactor these to use declarations framework:
-    validations
     associations
   classes (like ActiveRecord)
   metas
@@ -36,11 +35,7 @@ associations:
   auto views
     has one
     has many
-    has and belongs to many
 validations:
-  inheritable validations
-  module-defined validations
-  extraction into separate API
   networking:
     transferrable validations (don't repeat presence_of on server if client already checked, but check uniqueness_of)
 admin tasks:
