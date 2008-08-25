@@ -1,6 +1,7 @@
 module StrokeDB
   module Associations
-    module ClassMethods
+    module HasMany
+      include Base
       #  
       # class WebSite
       #   has_many :pages
@@ -13,37 +14,37 @@ module StrokeDB
           options[:extensions] ||= []
           options[:extensions] << Module.new(&blk)
         end
-        register_association(HasMany.new({:slotname => slotname}.merge(options)))
+        register_association(Association.new({:slotname => slotname}.merge(options)))
       end
-    end # ClassMethods
     
-    class HasMany
-      attr_accessor :slotname
+      class Association
+        attr_accessor :slotname
       
-      def initialize(options)
-        @options = OptionsHash(options)
-        @slotname = @options.require(:slotname)
-      end
-      
-      def setup(mod)
-        slotname = @slotname
-        mod.send(:define_method, slotname) do
-          self[slotname]
+        def initialize(options)
+          @options = OptionsHash(options)
+          @slotname = @options.require(:slotname)
         end
-        mod.send(:define_method, slotname.to_s + "=") do |value|
-          self[slotname] = value
+      
+        def setup(mod)
+          slotname = @slotname
+          mod.send(:define_method, slotname) do
+            self[slotname]
+          end
+          mod.send(:define_method, slotname.to_s + "=") do |value|
+            self[slotname] = value
+          end
+        
+          # self.on_get_slot(slotname, )
+          # on slot access -> create proxy
+        end
+      
+        class CollectionProxy
+          def initialize(document)
+          
+          end
         end
         
-        # self.on_get_slot(slotname, )
-        # on slot access -> create proxy
-      end
-      
-      class CollectionProxy
-        def initialize(document)
-          
-        end
-      end
-    
+      end # Association
     end # BelongsTo
   end # Validations
 end # StrokeDB
