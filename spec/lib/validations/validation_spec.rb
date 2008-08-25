@@ -39,8 +39,8 @@ describe "Validation of" do
       @errors.map{|e| 
         [e.validation.class, e.validation.slotname.to_sym] 
       }.should == [
-        [Validations::Kind,     :age], 
-        [Validations::Presence, :gender]
+        [Validations::Kind::Validation,     :age], 
+        [Validations::Presence::Validation, :gender]
       ]
     end
   end

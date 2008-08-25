@@ -1,6 +1,6 @@
 module StrokeDB
   module Validations
-    module ClassMethods
+    module Presence
       # Validates that the specified attributes are not blank (as defined by Object#blank?).
       #
       # Configuration options:
@@ -15,31 +15,29 @@ module StrokeDB
       #
       def validates_presence_of(slot, options = {})
         # TODO: check the args
-        register_validation(Presence.new({:slotname => slot}.merge(options)))
+        register_validation(Validation.new({:slotname => slot}.merge(options)))
       end
       alias validate_presence_of validates_presence_of # nobody likes stupid typos
-      
-    end # ClassMethods
     
-    class Presence < BaseSlotValidation
-      DEFAULT_OPTIONS = {
-        :message => proc { |doc, slotname, validation| "#{slotname} can't be blank" },
-        :boolean => false      
-      }
+      class Validation < BaseSlotValidation
+        DEFAULT_OPTIONS = {
+          :message => proc { |doc, slotname, validation| "#{slotname} can't be blank" },
+          :boolean => false      
+        }
       
-      attr_accessor :boolean
+        attr_accessor :boolean
       
-      def initialize(options)
-        super(options, DEFAULT_OPTIONS)
-        @boolean  = @options.require(:boolean)
-      end
-      
-      def validate(doc, errors)
-        super(doc, errors) do |slotname, value|
-          !value.blank? || value == false && @boolean
+        def initialize(options)
+          super(options, DEFAULT_OPTIONS)
+          @boolean  = @options.require(:boolean)
         end
-      end
-    
+      
+        def validate(doc, errors)
+          super(doc, errors) do |slotname, value|
+            !value.blank? || value == false && @boolean
+          end
+        end
+      end # Validation
     end # Presence
   end # Validations
 end # StrokeDB

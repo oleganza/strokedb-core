@@ -29,47 +29,55 @@ describe "Validations[introspection]" do
   
   it "should be inheritable when defined in a module" do
     map = @map
+    
+    presence = Validations::Presence::Validation
+    kind     = Validations::Kind::Validation
+    
     @contacts_validations.validations.map(&map).should == [
-      [Validations::Presence, :phone],
-      [Validations::Presence, :email]
+      [presence, :phone],
+      [presence, :email]
     ]
     @person.validations.map(&map).should == [
-      [Validations::Presence, :name],
-      [Validations::Presence, :phone],
-      [Validations::Presence, :email]
+      [presence, :name],
+      [presence, :phone],
+      [presence, :email]
     ]
     @more_validations.validations.map(&map).should == [
-      [Validations::Presence, :more],
-      [Validations::Kind,     :something],
-      [Validations::Presence, :phone],
-      [Validations::Presence, :email]
+      [presence, :more],
+      [kind,     :something],
+      [presence, :phone],
+      [presence, :email]
     ]
     @person.send(:include, @more_validations)
     @person.validations.map(&map).should == [
-      [Validations::Presence, :name],
-      [Validations::Presence, :more],
-      [Validations::Kind,     :something],
-      [Validations::Presence, :phone],
-      [Validations::Presence, :email]
+      [presence, :name],
+      [presence, :more],
+      [kind,     :something],
+      [presence, :phone],
+      [presence, :email]
     ]
   end
 
   it "should be inheritable when defined in a class"  do
     map = @map
+    
+    presence = Validations::Presence::Validation
+    kind     = Validations::Kind::Validation
+    
     @girlfriend.validations.map(&map).should == [
-      [Validations::Presence, :boyfriend],
-      [Validations::Presence, :name],
-      [Validations::Presence, :phone],
-      [Validations::Presence, :email]
+      [presence, :boyfriend],
+      [presence, :name],
+      [presence, :phone],
+      [presence, :email]
     ]
     @person.send(:include, @more_validations)
     @girlfriend.validations.map(&map).should == [
-      [Validations::Presence, :boyfriend],
-      [Validations::Presence, :name],
-      [Validations::Presence, :more],
-      [Validations::Kind,     :something],
-      [Validations::Presence, :phone],
-      [Validations::Presence, :email]
+      [presence, :boyfriend],
+      [presence, :name],
+      [presence, :more],
+      [kind,     :something],
+      [presence, :phone],
+      [presence, :email]
     ]
   end
   
