@@ -7,6 +7,7 @@ require 'strokedb/util/require_one_of'
 require 'strokedb/util/verify'
 require 'strokedb/util/pluggable_module'
 require 'strokedb/util/declarations'
+require 'strokedb/util/lazy_mapping_array'
 
 module StrokeDB
   include Util
