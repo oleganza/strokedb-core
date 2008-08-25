@@ -1,0 +1,1 @@
+require "strokedb/document/nsurl"

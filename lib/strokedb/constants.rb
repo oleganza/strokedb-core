@@ -11,8 +11,8 @@ module StrokeDB
   #    #=> Sun Apr 27 19:39:09 UTC 2008
   XMLSCHEMA_TIME_RE = /\A\s*(-?\d+)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(\.\d*)?(Z|[+-]\d\d:\d\d)?\s*\z/i
 
-  STROKEDB_NSURL = "http://strokedb.com/"
-  DEFAULT_NSURL = "http://localhost/"
+  STROKEDB_NSURL = "http://strokedb.com"
+  DEFAULT_NSURL = "http://localhost"
 
   if ENV['DEBUG'] || $DEBUG
     def DEBUG

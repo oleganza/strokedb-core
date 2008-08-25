@@ -15,28 +15,28 @@ describe NSURL do
   end
   
   it "should be set with #nsurl=" do
-    @base.nsurl = "http://abc.com/"
-    @base.nsurl.should == "http://abc.com/"
+    @base.nsurl = "http://abc.com"
+    @base.nsurl.should == "http://abc.com"
   end
   
   it "should be set with #nsurl(url)" do
-    @base.nsurl "http://xyz.com/"
-    @base.nsurl.should == "http://xyz.com/"
+    @base.nsurl "http://xyz.com"
+    @base.nsurl.should == "http://xyz.com"
   end
   
   it "should be inheritable and overwriteable" do
     # sub inherits base's nsurl if doesn't have own value
-    @base.nsurl = "http://xyz.com/"
-    @sub.nsurl.should == "http://xyz.com/"
-    @base.nsurl = "http://qwe.com/"
-    @sub.nsurl.should == "http://qwe.com/"
+    @base.nsurl = "http://xyz.com"
+    @sub.nsurl.should == "http://xyz.com"
+    @base.nsurl = "http://qwe.com"
+    @sub.nsurl.should == "http://qwe.com"
     # sub defines its own value
-    @sub.nsurl = "http://sub.com/"
-    @base.nsurl.should == "http://qwe.com/"
-    @sub.nsurl.should == "http://sub.com/"
+    @sub.nsurl = "http://sub.com"
+    @base.nsurl.should == "http://qwe.com"
+    @sub.nsurl.should == "http://sub.com"
     # changed base, but submodule keeps its nsurl
-    @base.nsurl = "http://base.com/"
-    @sub.nsurl.should == "http://sub.com/"
+    @base.nsurl = "http://base.com"
+    @sub.nsurl.should == "http://sub.com"
   end
 
 end
