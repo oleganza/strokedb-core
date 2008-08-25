@@ -25,11 +25,15 @@ networking:
     for repositories
     for views
 StrokeObjects (collection of OO APIs):
-  refactor these to use declarations framework:
-    associations
   classes (like ActiveRecord)
+  callbacks
+    validations
+  repository-local validations
+    >> think on modular decomposed models
   metas
+    detection from constants
   autoload (lazy_mapping_array and such stuff)
+  nsurl
 associations:
   identity map in a repository (versions' equality must imply object_id's equality)
   auto views
