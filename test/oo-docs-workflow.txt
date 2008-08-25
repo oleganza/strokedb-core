@@ -1,0 +1,96 @@
+
+configure repo - install modules, open files/connections.
+read document:
+  given uuid
+    ask repo
+  given nsurl and name:
+    calculate sha1 uuid
+    ask repo for this uuid
+  given module:
+    retrieve nsurl and name
+    calculate sha1 uuid
+    ask repo
+create meta
+  raw document:
+    save as is: [:uuid], [:name], [:nsurl] needed
+  transparent save (from the code definition)
+    named document:
+      uuid = sha1(name + nsurl)
+    autodocument:
+      save on demand:
+        if not found in repo, save
+
+Examples:        
+  Person (mapped to person@example.com)
+  
+  module Person
+    extend StrokeDB::NSURL
+    extend StrokeDB::Document::Module
+    include Database
+    
+    nsurl "http://oleganza.com"
+    name "person" # or extend AutoName
+    
+    slots :name => ..., :nsurl => ..., :uuid => ...
+    
+  end
+  
+  doc.is_a? Person
+  
+  1. doc is a module
+  2. doc can be a meta
+  3. doc holds methods
+  4. doc can be an argument to #is_a? method
+  
+  method search:
+  1. ruby-style:  first level, then second, then third etc.
+  2. io-style: first proto recursive, second recursive etc.
+
+  Ruby:
+      M1 M2 M3
+  L1  1  2  3  
+  L2  4  5  6
+  L3  7  8  9
+  
+  (L1, L2, L3 - levels)
+  
+  Io:
+      P1 P2 P3
+  L1  1  4  7 
+  L2  2  5  8
+  L3  3  6  9
+  
+  doc:
+    slots
+    eigen module
+    compiled module
+   
+  # Ideas: 
+  # 1. Every document can be a meta-document
+  # 2. Slot access can be done thru inheritance chain.
+  # 3. Methods in a meta's module are mixed in a docuemnt instance
+  #
+  module MetaDocument
+
+    attr_accessor :eigen_module
+    attr_accessor :compiled_module
+    
+    def eigen_module
+      @eigen_module ||= Module.new
+    end
+    
+    # TODO: invalidation???
+    def compiled_module
+      @compiled_module and return @compiled_module
+      @compiled_module = Module.new
+      self[:metas].inject(Module.new) do |mod, meta|
+        mod.send(:include, meta.compiled_module)
+      end
+      @compiled_module.send(:include, eigen_module)
+      @compiled_module
+    end
+    
+  end
+  
+  
+  
