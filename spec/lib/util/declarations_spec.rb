@@ -103,6 +103,13 @@ describe Declarations do
       end
       base.after_save_callbacks.should  == [:c, :b, :a]
       sub.after_save_callbacks.should   == [:w, :s, :c, :b, :a]
+      
+      # Remove callbacks in a child
+      sub.local_declarations_remove(:after_save)
+      sub.after_save_callbacks.should   == [:c, :b, :a]
+      # Remove callbacks in a base
+      base.local_declarations_remove(:after_save)
+      base.after_save_callbacks.should   == [ ]
     end
     
     

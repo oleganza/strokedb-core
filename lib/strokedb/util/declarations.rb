@@ -56,6 +56,13 @@ module StrokeDB
       invalidate_decl_cache!
       value
     end
+    
+    def local_declarations_remove(name)
+      decls = (@local_declarations ||= {})
+      decls.delete(name)
+      invalidate_decl_cache!
+      nil
+    end
   
     def inherited_declarations(name)
       decls = @inherited_declarations

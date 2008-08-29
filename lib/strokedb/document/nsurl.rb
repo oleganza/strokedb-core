@@ -14,7 +14,7 @@ module StrokeDB
     end
     
     def nsurl=(nsurl)
-      local_declarations_set(:nsurl, nsurl)
+      nsurl ? local_declarations_set(:nsurl, nsurl) : local_declarations_remove(:nsurl)
     end
     
     module Ours
