@@ -3,16 +3,19 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
 
 require 'set'
 require 'fileutils'
-begin
-  require 'extlib' 
-rescue LoadError => e
-  raise e, "Extlib is missing. See http://github.com/sam/extlib/"
+
+def git_require(name, url)
+  begin
+    require name
+  rescue LoadError => e
+    raise e, "#{name} is missing. See #{url}"
+  end  
 end
-begin
-  require 'tokyocabinet-wrapper' 
-rescue LoadError => e
-  raise e, "Tokyocabinet wrapper is missing. See http://github.com/oleganza/tokyocabinet-wrapper/"
-end
+
+git_require 'extlib',               'http://github.com/sam/extlib/'
+git_require 'tokyocabinet-wrapper', 'http://github.com/oleganza/tokyocabinet-wrapper/'
+git_require 'declarations',         'http://github.com/oleganza/declarations/'
+
 require 'strokedb/version'
 require 'strokedb/constants'
 require 'strokedb/util'

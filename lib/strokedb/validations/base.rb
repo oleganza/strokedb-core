@@ -1,7 +1,7 @@
 module StrokeDB
   module Validations
     module Base
-      include StrokeDB::Declarations
+      include Declarations
       
       def register_validation(validation)
         local_declarations(:validations, []) do |list|

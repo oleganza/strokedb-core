@@ -1,6 +1,6 @@
 module StrokeDB
   module NSURL
-    include StrokeDB::Declarations
+    include Declarations
     
     NO_NSURL = Object.new.freeze
     

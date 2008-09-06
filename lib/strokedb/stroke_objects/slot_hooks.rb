@@ -1,7 +1,7 @@
 module StrokeDB
   module StrokeObjects
     module SlotHooks
-      include StrokeDB::Declarations
+      include Declarations
       # Sets inheritable get/set hooks on a slot.
       #
       # Example:

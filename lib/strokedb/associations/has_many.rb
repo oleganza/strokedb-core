@@ -18,7 +18,7 @@ module StrokeDB
       end
     
       class Association
-        attr_accessor :slotname
+        attr_accessor :slotname, :options
       
         def initialize(options)
           @options = OptionsHash(options)
@@ -27,17 +27,30 @@ module StrokeDB
       
         def setup(mod)
           slotname = @slotname
+          mod.extend StrokeObjects::SlotHooks
           mod.send(:define_method, slotname) do
             self[slotname]
           end
           mod.send(:define_method, slotname.to_s + "=") do |value|
             self[slotname] = value
           end
-        
-          # self.on_get_slot(slotname, )
-          # on slot access -> create proxy
+          mod.slot_hook(slotname, AssociationSlotHook)
         end
-      
+        
+        module AssociationSlotHook
+          def get(doc, slotname)
+            ivar = "@#{slotname}"
+            proxy = doc.instance_variable_get(ivar)
+            proxy and return proxy
+            assoc = doc.class.association(slotname)
+            proxy = CollectionProxy.new(assoc)
+            doc.instance_variable_set(ivar, proxy)
+          end
+          def set(doc, slotname, value)
+            
+          end
+        end
+        
         class CollectionProxy
           def initialize(document)
           

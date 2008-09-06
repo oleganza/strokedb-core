@@ -1,7 +1,7 @@
 module StrokeDB
   module Associations
     module Base
-      include StrokeDB::Declarations
+      include Declarations
       
       def register_association(association)
         local_declarations(:associations, []) do |list|
@@ -17,6 +17,11 @@ module StrokeDB
           end
         end
       end      
+
+      # Returns association object for a given slotname.
+      def association(slotname)
+        associations.detect{|a| a.slotname = slotname }
+      end
       
     end # Base
   end # Associations
