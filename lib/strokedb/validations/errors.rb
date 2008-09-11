@@ -32,6 +32,7 @@ module StrokeDB
           sn = error.slotname
           hash[sn] ||= []
           hash[sn] << error
+          hash
         end
       end
       
