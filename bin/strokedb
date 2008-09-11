@@ -1,14 +1,11 @@
 #!/usr/bin/env ruby
-
-development_lib = File.join(File.dirname(__FILE__), '..', 'lib')
-if File.exists? development_lib + '/strokedb.rb'
-  $LOAD_PATH.unshift(development_lib).uniq!
-else
-  require 'rubygems'
+require 'rubygems'
+def git_require(name, url)
+  begin
+    require name
+  rescue LoadError => e
+    raise e, "#{name} is missing. See #{url}"
+  end  
 end
-
-require 'strokedb'
-require 'strokedb/console'
-
-include StrokeDB::Console
-IRB.start
+git_require 'gem_console', 'http://github.com/oleganza/gem_console/'
+gem_console('strokedb')

@@ -12,9 +12,10 @@ end
 
 include FileUtils
 
-NAME = "strokedb-core"
+require "lib/strokedb/version"
 
-require "lib/strokedb-core/version"
+GEM_NAME = "strokedb"
+GEM_VERSION = StrokeDB::VERSION
 
 def sudo
   ENV['STROKEDB_SUDO'] ||= "sudo"
@@ -40,16 +41,16 @@ task :default => :specs
 task :strokedb => [:clean, :rdoc, :package]
 
 spec = Gem::Specification.new do |s|
-  s.name         = NAME
-  s.version      = StrokeDB::Core::VERSION
+  s.name         = GEM_NAME
+  s.version      = GEM_VERSION
   s.platform     = Gem::Platform::RUBY
-  s.author       = "Oleg Andreev"
-  s.email        = "oleganza@gmail.com"
-  s.homepage     = "http://strokedb.com"
+  s.author       = "Oleg Andreev, Yurii Rashkovskii"
+  s.email        = "oleganza@gmail.com, yrashk@gmail.com"
+  s.homepage     = "http://strokedb.com/"
   s.summary      = "StrokeDB. Distributed document-oriented database."
   s.bindir       = "bin"
   s.description  = s.summary
-  s.executables  = %w(  )
+  s.executables  = %w( strokedb )
   s.require_path = "lib"
   s.files        = %w( MIT-LICENSE README Rakefile TODO ) + Dir["{docs,bin,spec,lib,examples,script}/**/*"]
 
@@ -76,15 +77,15 @@ end
 
 desc "Run :package and install the resulting .gem"
 task :install => :package do
-  sh %{#{sudo} gem install #{install_home} --local pkg/#{NAME}-#{StrokeDB::Core::VERSION}.gem --no-rdoc --no-ri}
+  sh %{#{sudo} gem install #{install_home} --local pkg/#{GEM_NAME}-#{GEM_VERSION}.gem --no-rdoc --no-ri}
 end
 
 #desc "Run :package and install the resulting .gem with jruby"
 #task :jinstall => :package do
-#  sh %{#{sudo} jruby -S gem install #{install_home} pkg/#{NAME}-#{StrokeDB::Core::VERSION}.gem --no-rdoc --no-ri}
+#  sh %{#{sudo} jruby -S gem install #{install_home} pkg/#{GEM_NAME}-#{GEM_VERSION}.gem --no-rdoc --no-ri}
 #end
 
 desc "Run :clean and uninstall the .gem"
 task :uninstall => :clean do
-  sh %{#{sudo} gem uninstall #{NAME}}
+  sh %{#{sudo} gem uninstall #{GEM_NAME}}
 end
