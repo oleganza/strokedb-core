@@ -1,20 +1,8 @@
-require 'rubygems'
-$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
+# `git submodule update --init`
+($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
 
 require 'set'
 require 'fileutils'
-
-def git_require(name, url)
-  begin
-    require name
-  rescue LoadError => e
-    raise e, "#{name} is missing. See #{url}"
-  end  
-end
-
-git_require 'extlib',               'http://github.com/sam/extlib/'
-git_require 'tokyocabinet-wrapper', 'http://github.com/oleganza/tokyocabinet-wrapper/'
-git_require 'declarations',         'http://github.com/oleganza/declarations/'
 
 require 'strokedb/version'
 require 'strokedb/constants'
