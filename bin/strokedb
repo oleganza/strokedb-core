@@ -1,11 +1,6 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-def git_require(name, url)
-  begin
-    require name
-  rescue LoadError => e
-    raise e, "#{name} is missing. See #{url}"
-  end  
-end
-git_require 'gem_console', 'http://github.com/oleganza/gem_console/'
+
+($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
+require 'gem_console'
 gem_console('strokedb')

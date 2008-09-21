@@ -1,8 +1,12 @@
-# `git submodule update --init`
-($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
-
 require 'set'
 require 'fileutils'
+
+# These libs are not published as gems yet.
+# git submodule init && git submodule update
+($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
+require 'extlib'
+require 'tokyocabinet-wrapper'
+require 'declarations'
 
 require 'strokedb/version'
 require 'strokedb/constants'
