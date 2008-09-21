@@ -1,0 +1,12 @@
+[submodule "vendor/gem_console"]
+	path = vendor/gem_console
+	url = git://github.com/oleganza/gem_console.git
+[submodule "vendor/extlib"]
+	path = vendor/extlib
+	url = git://github.com/sam/extlib.git
+[submodule "vendor/tokyocabinet-wrapper"]
+	path = vendor/tokyocabinet-wrapper
+	url = git://github.com/oleganza/tokyocabinet-wrapper.git
+[submodule "vendor/declarations"]
+	path = vendor/declarations
+	url = git://github.com/oleganza/declarations.git

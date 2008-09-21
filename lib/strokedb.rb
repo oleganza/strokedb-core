@@ -1,20 +1,22 @@
-require 'rubygems'
-$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__))
-
 require 'set'
 require 'fileutils'
 
-def git_require(name, url)
-  begin
-    require name
-  rescue LoadError => e
-    raise e, "#{name} is missing. See #{url}"
-  end  
+# These libs are not published as gems yet.
+# git submodule init && git submodule update
+begin
+  ($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
+  libs = %w[extlib tokyocabinet-wrapper declarations]
+  libs.each do |lib|
+    require lib
+  end
+rescue LoadError => e
+  puts "You need submodules #{libs.join(', ')} to be updated. Update now? [y/n]"
+  if gets.strip =~ /^y/
+    system("git submodule init && git submodule update")
+    retry
+  end
+  raise
 end
-
-git_require 'extlib',               'http://github.com/sam/extlib/'
-git_require 'tokyocabinet-wrapper', 'http://github.com/oleganza/tokyocabinet-wrapper/'
-git_require 'declarations',         'http://github.com/oleganza/declarations/'
 
 require 'strokedb/version'
 require 'strokedb/constants'

@@ -1,11 +1,17 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-def git_require(name, url)
-  begin
-    require name
-  rescue LoadError => e
-    raise e, "#{name} is missing. See #{url}"
-  end  
+
+# These libs are not published as gems yet.
+# git submodule init && git submodule update
+begin
+  ($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
+  require 'gem_console'
+rescue LoadError => e
+  puts "You need submodule 'gem_console' to be updated. Update now? [y/n]"
+  if gets.strip =~ /^y/
+    system("git submodule init && git submodule update")
+    retry
+  end
+  raise
 end
-git_require 'gem_console', 'http://github.com/oleganza/gem_console/'
 gem_console('strokedb')
