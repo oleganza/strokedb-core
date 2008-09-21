@@ -3,8 +3,8 @@ require 'fileutils'
 
 # These libs are not published as gems yet.
 # git submodule init && git submodule update
-($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
 begin
+  ($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
   libs = %w[extlib tokyocabinet-wrapper declarations]
   libs.each do |lib|
     require lib

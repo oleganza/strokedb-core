@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 
-($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
+# These libs are not published as gems yet.
+# git submodule init && git submodule update
 begin
+  ($:.unshift *(Dir[ File.join( File.dirname(__FILE__), '..', 'vendor', '**', 'lib' ) ].to_a.map {|f| File.expand_path(f) }) ).uniq!
   require 'gem_console'
 rescue LoadError => e
   puts "You need submodule 'gem_console' to be updated. Update now? [y/n]"
